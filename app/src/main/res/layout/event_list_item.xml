@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/event_card"
+    style="style/EventCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="15sp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/teal_200">
+
+        <View
+            android:id="@+id/date_view"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:backgroundTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/date_view_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toTopOf="@id/date_view_month"
+            app:layout_constraintEnd_toEndOf="@id/date_view"
+            app:layout_constraintStart_toStartOf="@id/date_view"
+            app:layout_constraintTop_toTopOf="@id/date_view"
+            tools:text="25" />
+
+        <TextView
+            android:id="@+id/date_view_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/date_view"
+            app:layout_constraintEnd_toEndOf="@id/date_view"
+            app:layout_constraintStart_toStartOf="@id/date_view"
+            app:layout_constraintTop_toBottomOf="@id/date_view_day"
+            tools:text="MAR" />
+
+        <TextView
+            android:id="@+id/event_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:textAlignment="textStart"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/event_time"
+            app:layout_constraintEnd_toStartOf="@id/event_image"
+            app:layout_constraintStart_toEndOf="@id/date_view"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Event name" />
+
+        <TextView
+            android:id="@+id/event_time"
+            android:layout_width="224dp"
+            android:layout_height="21dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@id/event_invited_by"
+            app:layout_constraintEnd_toStartOf="@id/event_image"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/date_view"
+            app:layout_constraintTop_toBottomOf="@id/event_title"
+            tools:text="8:00 - 11:00" />
+
+        <TextView
+            android:id="@+id/event_invited_by"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/event_image"
+            app:layout_constraintStart_toEndOf="@id/date_view"
+            app:layout_constraintTop_toBottomOf="@id/event_time"
+            tools:text="Invited by Martin Bartos" />
+
+
+        <View
+            android:id="@+id/event_image"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_launcher_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
