@@ -11,7 +11,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="95dp"
         android:background="@color/teal_200">
 
         <View
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
 
-            android:textSize="15sp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@id/date_view"
             app:layout_constraintEnd_toEndOf="@id/date_view"
             app:layout_constraintStart_toStartOf="@id/date_view"
@@ -51,33 +51,46 @@
             tools:text="MAR" />
 
         <TextView
-            android:id="@+id/event_title"
+            android:id="@+id/event_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:textAlignment="textStart"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@id/event_time"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@id/event_title"
             app:layout_constraintEnd_toStartOf="@id/event_image"
             app:layout_constraintStart_toEndOf="@id/date_view"
             app:layout_constraintTop_toTopOf="parent"
+            tools:text="Tomorrow 8:00pm - 12:00pm" />
+
+        <TextView
+            android:id="@+id/event_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:textAlignment="textStart"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toTopOf="@id/event_venue"
+            app:layout_constraintEnd_toStartOf="@id/event_image"
+            app:layout_constraintStart_toEndOf="@id/date_view"
+            app:layout_constraintTop_toBottomOf="@id/event_time"
             tools:text="Event name" />
 
         <TextView
-            android:id="@+id/event_time"
-            android:layout_width="224dp"
-            android:layout_height="21dp"
+            android:id="@+id/event_venue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:textSize="15sp"
             app:layout_constraintBottom_toTopOf="@id/event_invited_by"
             app:layout_constraintEnd_toStartOf="@id/event_image"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@id/date_view"
             app:layout_constraintTop_toBottomOf="@id/event_title"
-            tools:text="8:00 - 11:00" />
+            tools:text="Chicago, USA" />
 
         <TextView
             android:id="@+id/event_invited_by"
@@ -90,7 +103,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/event_image"
             app:layout_constraintStart_toEndOf="@id/date_view"
-            app:layout_constraintTop_toBottomOf="@id/event_time"
+            app:layout_constraintTop_toBottomOf="@id/event_venue"
             tools:text="Invited by Martin Bartos" />
 
 

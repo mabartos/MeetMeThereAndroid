@@ -8,6 +8,7 @@ import java.time.LocalDateTime
 class EventsListItem(
     val id: Long,
     val title: String,
+    val venue: String,
     val imageUrl: String,
     val description: String,
     val isPublic: Boolean,

@@ -7,4 +7,7 @@
     <string name="maybe">Maybe</string>
     <string name="decline">Decline</string>
     <string name="events">Events</string>
+    <string name="back_button">Back button</string>
+    <string name="event_detail_image">Event Detail image</string>
+    <string name="invited_by">Invited by</string>
 </resources>

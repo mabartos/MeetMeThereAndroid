@@ -17,18 +17,18 @@
         android:textColor="@color/black"
         android:textSize="25sp"
 
-        app:layout_constraintBottom_toTopOf="@id/map"
+        app:layout_constraintBottom_toTopOf="@id/event_map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
 
-    <fragment
-        android:id="@+id/map"
-        class="com.google.android.gms.maps.MapFragment"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/event_map"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        app:cornerRadius="20dp"
+        tools:context=".MainActivity"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         app:layout_constraintTop_toBottomOf="@id/events_list_title"
         app:layout_constraintBottom_toTopOf="@id/events_list"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,22 +40,13 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:paddingTop="30dp"
-        app:layout_constraintBottom_toTopOf="@id/events_list_navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/map"
-        tools:listitem="@layout/event_list_item" />
+        android:radius="17dp"
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/events_list_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/design_default_color_primary"
-        app:menu="@menu/bottom_navigation_events_list"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/events_list" />
+        app:layout_constraintTop_toBottomOf="@id/event_map"
+        tools:listitem="@layout/event_list_item" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
