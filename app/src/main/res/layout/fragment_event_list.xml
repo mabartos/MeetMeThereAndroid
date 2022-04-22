@@ -20,20 +20,18 @@
         app:layout_constraintBottom_toTopOf="@id/event_map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/event_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        tools:context=".MainActivity"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        app:layout_constraintTop_toBottomOf="@id/events_list_title"
         app:layout_constraintBottom_toTopOf="@id/events_list"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/events_list_title"
+        tools:context=".MainActivity" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/events_list"
@@ -47,6 +45,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/event_map"
         tools:listitem="@layout/event_list_item" />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/create_event_floating_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/purple_500"
+            android:contentDescription="@string/create_event"
+            app:srcCompat="@drawable/ic_add_white" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

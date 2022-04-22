@@ -1,14 +1,23 @@
 package org.mabartos.meetmethere.ui.list
 
+import android.Manifest
+import android.content.ContentValues.TAG
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -17,6 +26,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.gms.tasks.Task
 import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.databinding.FragmentEventListBinding
 import org.mabartos.meetmethere.repository.EventsRepository
@@ -26,6 +37,12 @@ class EventsListFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentEventListBinding
+
+    private val fusedLocationClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(requireContext())
+    }
+
+    private var cancellationTokenSource = CancellationTokenSource()
 
     private val eventsRepository: EventsRepository by lazy {
         EventsRepository(requireContext())
@@ -41,7 +58,6 @@ class EventsListFragment : Fragment(), OnMapReadyCallback {
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.event_map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
         return binding.root
     }
 
@@ -49,12 +65,18 @@ class EventsListFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requestCurrentLocation()
+        
         val adapter = EventsListAdapter(
             onItemClick = {
                 findNavController()
                     .navigate(EventsListFragmentDirections.actionListFragmentToDetailFragment(it.id))
             },
         )
+
+        binding.createEventFloatingButton.setOnClickListener {
+            findNavController().navigate(EventsListFragmentDirections.actionListFragmentToCreateEventDialog())
+        }
 
         binding.eventsList.layoutManager = LinearLayoutManager(requireContext())
         binding.eventsList.adapter = adapter
@@ -65,7 +87,7 @@ class EventsListFragment : Fragment(), OnMapReadyCallback {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap.uiSettings.isMyLocationButtonEnabled = true;
+        mMap.uiSettings.isMyLocationButtonEnabled = true
 
         val events = eventsRepository.getMockedData()
         val markers = mutableListOf<Marker?>()
@@ -92,6 +114,43 @@ class EventsListFragment : Fragment(), OnMapReadyCallback {
         val cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding)
 
         mMap.animateCamera(cu);
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Cancels location request (if in flight).
+        cancellationTokenSource.cancel()
+    }
+
+    private fun requestCurrentLocation() {
+        // Check Fine permission
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) ==
+            PackageManager.PERMISSION_GRANTED
+        ) {
+
+            // Main code
+            val currentLocationTask: Task<Location> = fusedLocationClient.getCurrentLocation(
+                PRIORITY_HIGH_ACCURACY,
+                cancellationTokenSource.token
+            )
+
+            currentLocationTask.addOnCompleteListener { task: Task<Location> ->
+                val result = if (task.isSuccessful) {
+                    val result: Location = task.result
+                    "Location (success): ${result.latitude}, ${result.longitude}"
+                } else {
+                    val exception = task.exception
+                    "Location (failure): $exception"
+                }
+
+                Log.d(TAG, "getCurrentLocation() result: $result")
+            }
+        } else {
+            // Request fine location permission (full code below).
+        }
     }
 
 }

@@ -13,4 +13,12 @@
     <string name="favorites">Favorites</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="venue">Venue</string>
+    <string name="start">Start</string>
+    <string name="time">Time</string>
+    <string name="day">Day</string>
+    <string name="end">End</string>
+    <string name="create_event">Create event</string>
 </resources>
