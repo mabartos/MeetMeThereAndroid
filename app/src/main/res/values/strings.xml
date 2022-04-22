@@ -10,4 +10,7 @@
     <string name="back_button">Back button</string>
     <string name="event_detail_image">Event Detail image</string>
     <string name="invited_by">Invited by</string>
+    <string name="favorites">Favorites</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

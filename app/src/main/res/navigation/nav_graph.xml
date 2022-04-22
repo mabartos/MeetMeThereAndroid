@@ -24,7 +24,7 @@
 
         <argument
             android:name="id"
-            app:argType="string" />
+            app:argType="long" />
 
     </fragment>
 

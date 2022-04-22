@@ -107,7 +107,7 @@
             tools:text="Invited by Martin Bartos" />
 
 
-        <View
+        <ImageView
             android:id="@+id/event_image"
             android:layout_width="100dp"
             android:layout_height="match_parent"

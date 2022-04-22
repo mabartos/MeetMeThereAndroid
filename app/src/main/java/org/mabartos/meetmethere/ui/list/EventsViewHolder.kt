@@ -3,7 +3,8 @@ package org.mabartos.meetmethere.ui.list
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import org.mabartos.meetmethere.R
+import com.nostra13.universalimageloader.core.ImageLoader
+import org.mabartos.meetmethere.MainActivity
 import org.mabartos.meetmethere.data.EventsListItem
 import org.mabartos.meetmethere.databinding.EventListItemBinding
 import java.time.LocalDateTime
@@ -31,6 +32,8 @@ class EventsViewHolder(private val binding: EventListItemBinding) :
         binding.dateViewMonth.text = startTime.month.name.substring(0, 3)
         binding.dateViewDay.text = startTime.dayOfMonth.toString()
         binding.eventInvitedBy.text = "Invited by ${listItem.createdByName}"
+
+        ImageLoader.getInstance().displayImage(listItem.imageUrl, binding.eventImage)
 
         binding.eventCard.setOnClickListener {
             onItemClick(listItem)

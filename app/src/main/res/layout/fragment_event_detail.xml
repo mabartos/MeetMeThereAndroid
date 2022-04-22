@@ -12,7 +12,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="@color/black"/>
+        app:titleTextColor="@color/black" />
 
     <!--<ImageView
         android:id="@+id/event_detail_back_button"
@@ -32,6 +32,8 @@
         android:id="@+id/event_detail_image"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:maxWidth="200dp"
+        android:maxHeight="200dp"
         android:background="@drawable/ic_launcher_background"
         android:contentDescription="@string/event_detail_image"
         app:layout_constraintEnd_toEndOf="parent"
@@ -135,11 +137,12 @@
         android:background="@color/black"
         android:backgroundTint="@color/black"
         android:insetBottom="0dp"
-        android:text="@string/accept"
+        android:text="@string/yes"
         app:cornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/event_detail_maybe_button"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
     <Button
         android:id="@+id/event_detail_maybe_button"
@@ -161,7 +164,7 @@
         android:background="@color/black"
         android:backgroundTint="@color/black"
         android:insetBottom="0dp"
-        android:text="@string/decline"
+        android:text="@string/no"
         app:cornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

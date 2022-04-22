@@ -14,6 +14,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import org.mabartos.meetmethere.R
@@ -25,9 +26,6 @@ class EventsListFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentEventListBinding
-
-    private var currentPositionMarker: MarkerOptions? = null
-    private var currentLocationMarker: Marker? = null
 
     private val eventsRepository: EventsRepository by lazy {
         EventsRepository(requireContext())
@@ -54,34 +52,46 @@ class EventsListFragment : Fragment(), OnMapReadyCallback {
         val adapter = EventsListAdapter(
             onItemClick = {
                 findNavController()
-                    .navigate(EventsListFragmentDirections.actionListFragmentToDetailFragment(it.id.toString()))
+                    .navigate(EventsListFragmentDirections.actionListFragmentToDetailFragment(it.id))
             },
         )
 
         binding.eventsList.layoutManager = LinearLayoutManager(requireContext())
         binding.eventsList.adapter = adapter
 
-
         adapter.submitList(eventsRepository.getMockedData())
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        mMap.uiSettings.isMyLocationButtonEnabled = true;
 
-        val brno = LatLng(49.20, 16.58)
-        updateCurrentLocationMarker(brno, "Event with friends")
-    }
+        val events = eventsRepository.getMockedData()
+        val markers = mutableListOf<Marker?>()
 
-    private fun updateCurrentLocationMarker(latLng: LatLng, eventName: String) {
-        if (currentPositionMarker == null) {
-            currentPositionMarker = MarkerOptions()
-            currentPositionMarker!!.position(latLng)
-                .title(eventName)
-            currentLocationMarker = mMap.addMarker(currentPositionMarker!!)
+        events.forEach {
+            val options =
+                MarkerOptions().position(LatLng(it.latitude, it.longitude)).title(it.title)
+            markers.add(mMap.addMarker(options))
         }
-        if (currentLocationMarker != null) currentLocationMarker!!.position = latLng
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        val builder = LatLngBounds.Builder()
+
+        for (marker in markers) {
+            if (marker != null) {
+                builder.include(marker.position)
+            }
+        }
+
+        val bounds = builder.build()
+        val width = resources.displayMetrics.widthPixels
+        val height = resources.displayMetrics.heightPixels
+        val padding = (height * 0.20).toInt()
+
+        val cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding)
+
+        mMap.animateCamera(cu);
     }
 
 }
