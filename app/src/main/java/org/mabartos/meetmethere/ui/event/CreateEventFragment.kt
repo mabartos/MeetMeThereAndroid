@@ -1,4 +1,4 @@
-package org.mabartos.meetmethere.ui
+package org.mabartos.meetmethere.ui.event
 
 import android.os.Bundle
 import android.view.LayoutInflater

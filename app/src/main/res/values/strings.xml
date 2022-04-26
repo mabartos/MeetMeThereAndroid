@@ -21,4 +21,13 @@
     <string name="day">Day</string>
     <string name="end">End</string>
     <string name="create_event">Create event</string>
+    <string name="register">Register</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="firstname">First name</string>
+    <string name="lastname">Last name</string>
+    <string name="password">Password</string>
+    <string name="password_confirmation">Password confirmation</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
 </resources>

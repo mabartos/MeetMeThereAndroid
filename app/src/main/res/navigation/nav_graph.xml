@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/listFragment">
+    app:startDestination="@id/userLoginFragment">
 
     <fragment
         android:id="@+id/listFragment"
@@ -30,13 +30,50 @@
             android:name="id"
             app:argType="long" />
 
+        <action
+            android:id="@+id/action_detail_to_updateEvent"
+            app:destination="@id/updateEventFragment" />
+
     </fragment>
 
     <fragment
         android:id="@+id/createEventFragment"
-        android:name="org.mabartos.meetmethere.ui.CreateEventFragment"
+        android:name="org.mabartos.meetmethere.ui.event.CreateEventFragment"
         android:label="CreateEventFragment"
         tools:layout="@layout/fragment_event_create" />
+
+    <fragment
+        android:id="@+id/updateEventFragment"
+        android:name="org.mabartos.meetmethere.ui.event.UpdateEventFragment"
+        android:label="UpdateEventFragment"
+        tools:layout="@layout/fragment_event_update" />
+
+    <fragment
+        android:id="@+id/userRegisterFragment"
+        android:name="org.mabartos.meetmethere.ui.login.UserRegisterFragment"
+        android:label="UserRegisterFragment"
+        tools:layout="@layout/fragment_user_register">
+
+        <action
+            android:id="@+id/action_register_to_home"
+            app:destination="@id/listFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userLoginFragment"
+        android:name="org.mabartos.meetmethere.ui.login.UserLoginFragment"
+        android:label="UserLoginFragment"
+        tools:layout="@layout/fragment_user_login">
+
+        <action
+            android:id="@+id/action_login_to_eventList"
+            app:destination="@id/listFragment" />
+
+        <action
+            android:id="@+id/action_login_to_register"
+            app:destination="@id/userRegisterFragment" />
+
+    </fragment>
 
 
 </navigation>

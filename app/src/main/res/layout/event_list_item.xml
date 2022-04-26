@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="95dp"
-        android:background="@color/teal_200">
+        android:background="?attr/colorPrimary">
 
         <View
             android:id="@+id/date_view"
