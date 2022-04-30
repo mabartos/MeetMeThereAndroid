@@ -46,7 +46,13 @@
         android:id="@+id/updateEventFragment"
         android:name="org.mabartos.meetmethere.ui.event.UpdateEventFragment"
         android:label="UpdateEventFragment"
-        tools:layout="@layout/fragment_event_update" />
+        tools:layout="@layout/fragment_event_update"
+        
+        >
+        <argument
+            android:name="event"
+            app:argType="org.mabartos.meetmethere.data.EventsListItem" />
+    </fragment>
 
     <fragment
         android:id="@+id/userRegisterFragment"

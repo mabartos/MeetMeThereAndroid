@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/event_create_toolbar"
@@ -15,7 +15,7 @@
         app:titleTextColor="@color/black" />
 
     <ImageButton
-        android:id="@+id/event_create_save"
+        android:id="@+id/event_create_save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -43,6 +43,7 @@
         app:startIconDrawable="@drawable/ic_event">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/event_create_name_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -60,6 +61,7 @@
         app:startIconDrawable="@drawable/ic_home">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/event_create_venue_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -76,6 +78,7 @@
         app:layout_constraintTop_toBottomOf="@id/event_create_venue">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/event_create_description_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -102,8 +105,7 @@
         app:layout_constraintEnd_toStartOf="@id/event_create_start_time"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/event_create_start_title"
-        app:startIconDrawable="@drawable/ic_calendar_day"
-        >
+        app:startIconDrawable="@drawable/ic_calendar_day">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -155,8 +157,7 @@
         app:layout_constraintEnd_toStartOf="@id/event_create_end_time"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/event_create_end_title"
-        app:startIconDrawable="@drawable/ic_calendar_day"
-        >
+        app:startIconDrawable="@drawable/ic_calendar_day">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"

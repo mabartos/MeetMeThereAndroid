@@ -69,5 +69,10 @@ class EventDetailFragment : Fragment() {
 
         binding.eventDetailTime.text = String.format("%s - %s", startTimeText, endTimeText)
         binding.eventDetailDescription.text = item.description
+
+        binding.eventDetailSettings.setOnClickListener {
+            println("HERE")
+            findNavController().navigate(EventDetailFragmentDirections.actionDetailToUpdateEvent(item))
+        }
     }
 }

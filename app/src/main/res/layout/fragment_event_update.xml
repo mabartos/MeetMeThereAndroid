@@ -43,6 +43,7 @@
         app:startIconDrawable="@drawable/ic_event">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/event_update_name_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -60,6 +61,7 @@
         app:startIconDrawable="@drawable/ic_home">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/event_update_venue_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -76,6 +78,7 @@
         app:layout_constraintTop_toBottomOf="@id/event_update_venue">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/event_update_description_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

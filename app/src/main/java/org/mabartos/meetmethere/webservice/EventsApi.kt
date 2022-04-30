@@ -1,11 +1,11 @@
 package org.mabartos.meetmethere.webservice
 
+import org.mabartos.meetmethere.data.Event
+import org.mabartos.meetmethere.data.EventsListItem
 import org.mabartos.meetmethere.webservice.response.EventResponse
 import org.mabartos.meetmethere.webservice.response.EventsResponse
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface EventsApi {
 
@@ -19,5 +19,11 @@ interface EventsApi {
         @Path("id") id: Long,
         @Query("token") token: String,
     ): Call<EventResponse>
+
+    @POST("events/")
+    fun createEvent(event: Event): Call<Long>
+
+    @PATCH("events/@{id}/")
+    fun updateEvent(id: Long, event: Event): Call<Long>
 
 }
