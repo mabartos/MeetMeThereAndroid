@@ -108,6 +108,7 @@
         app:startIconDrawable="@drawable/ic_calendar_day">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/event_create_start_day_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="false"

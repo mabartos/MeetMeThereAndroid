@@ -8,12 +8,18 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.datepicker.MaterialDatePicker
 import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.Event
 import org.mabartos.meetmethere.databinding.FragmentEventCreateBinding
+import org.mabartos.meetmethere.util.datePicker
+import org.mabartos.meetmethere.util.response
+import org.mabartos.meetmethere.util.toast
 import org.mabartos.meetmethere.webservice.EventsApi
 import org.mabartos.meetmethere.webservice.RetrofitUtil
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.util.*
 
 class CreateEventFragment(
     private val eventsApi: EventsApi = RetrofitUtil.createAqiWebService()
@@ -39,6 +45,17 @@ class CreateEventFragment(
         }
         binding.eventCreateToolbar.title = "Create event"
 
+        binding.eventCreateStartDayInput.setOnClickListener {
+            context?.datePicker<Long>(
+                parentFragmentManager,
+                title = R.string.start_day_settings.toString(),
+                onPositiveClick = { selection ->
+                    val outputDateFormat = SimpleDateFormat("dd.MM", Locale.getDefault())
+                    binding.eventCreateStartDay.hint = outputDateFormat.format(selection)
+                }
+            )
+        }
+
         //TODO
         binding.eventCreateSaveButton.setOnClickListener {
             val titleText = binding.eventCreateNameInput.text.toString()
@@ -58,8 +75,14 @@ class CreateEventFragment(
                     latitude = 20.0
                 )
 
-            val eventId = eventsApi.createEvent(createEvent)
-            println("Event created ${eventId}")
+            context?.response(
+                { eventsApi.createEvent(createEvent) },
+                onSuccess = { id: Long ->
+                    context?.toast("Event created ${id}")
+                },
+                onFailure = { e: Throwable ->
+                    println("Cannot create event. ${e.message}")
+                })
         }
 
     }

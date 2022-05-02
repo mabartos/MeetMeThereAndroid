@@ -16,3 +16,8 @@ class Event(
     val longitude: Double,
     val latitude: Double
 ) : Parcelable
+
+data class EventResponse(
+    val status: String,
+    val data: Event
+)

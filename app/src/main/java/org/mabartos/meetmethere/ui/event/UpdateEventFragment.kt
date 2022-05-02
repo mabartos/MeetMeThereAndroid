@@ -11,6 +11,8 @@ import androidx.navigation.fragment.findNavController
 import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.Event
 import org.mabartos.meetmethere.databinding.FragmentEventUpdateBinding
+import org.mabartos.meetmethere.util.response
+import org.mabartos.meetmethere.util.toast
 import org.mabartos.meetmethere.webservice.EventsApi
 import org.mabartos.meetmethere.webservice.RetrofitUtil
 import java.time.LocalDateTime
@@ -71,7 +73,13 @@ class UpdateEventFragment(
                         endTime = LocalDateTime.of(2022, 10, 20, 19, 0)
                     )
 
-                eventsApi.updateEvent(event.id, updatedEvent)
+                context?.response(supplier = { eventsApi.updateEvent(event.id, updatedEvent) },
+                    onSuccess = { id: Long ->
+                        context?.toast("OK - updated ${id}")
+                    },
+                    onFailure = { e ->
+                        context?.toast("Cannot update event")
+                    })
             }
         }
 
