@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="tiffany_blue">#A4E8E0</color>
+    <color name="yellow">#F8EA8C</color>
+    <color name="freesia">#E1C340</color>
+    <color name="cyan">#4CD7D0</color>
     <color name="purple_200">#ffd8d7</color>
     <color name="purple_500">#E9A6A6</color>
     <color name="purple_700">#b57777</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
+    <color name="red">#AAAA0000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="green">#FF00FF00</color>
+    <color name="green">#FF59981A</color>
 </resources>

@@ -15,7 +15,7 @@
         app:titleTextColor="@color/black" />
 
     <ImageButton
-        android:id="@+id/event_detail_settings"
+        android:id="@+id/event_detail_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -24,35 +24,35 @@
         android:contentDescription="@string/settings"
         android:focusable="true"
         android:padding="8dp"
-        android:src="@drawable/ic_settings"
+        android:src="@drawable/ic_edit"
         app:layout_constraintBottom_toBottomOf="@id/event_detail_toolbar"
-        app:layout_constraintEnd_toEndOf="@id/event_detail_toolbar"
+        app:layout_constraintEnd_toStartOf="@id/event_detail_delete"
         app:layout_constraintTop_toTopOf="@id/event_detail_toolbar"
         app:tint="@color/black"
         tools:ignore="ContentDescription" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/menu"
-        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/event_detail_delete"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/accept"
-        app:layout_constraintTop_toBottomOf="@id/event_detail_toolbar"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <AutoCompleteTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
+        android:layout_margin="8dp"
+        android:background="@color/white"
+        android:clickable="true"
+        android:contentDescription="@string/settings"
+        android:focusable="true"
+        android:padding="8dp"
+        android:src="@drawable/ic_delete"
+        app:layout_constraintBottom_toBottomOf="@id/event_detail_toolbar"
+        app:layout_constraintEnd_toEndOf="@id/event_detail_toolbar"
+        app:layout_constraintTop_toTopOf="@id/event_detail_toolbar"
+        app:tint="@color/red"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/event_detail_image"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@drawable/ic_launcher_background"
+        android:layout_height="250dp"
+        android:background="?attr/colorSecondary"
         android:contentDescription="@string/event_detail_image"
         android:maxWidth="200dp"
         android:maxHeight="200dp"
@@ -150,15 +150,26 @@
         app:layout_constraintTop_toBottomOf="@id/event_time_divider"
         tools:text="This event is on a special venue and you need to bring your own instruments there. We have wine, beer and some kind of drugs." />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/detail_attendance_question"
+        app:layout_constraintBottom_toTopOf="@id/event_detail_accept_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="4dp"
+        />
+
     <Button
         android:id="@+id/event_detail_accept_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/black"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="@color/green"
         android:insetBottom="0dp"
         android:text="@string/yes"
         app:cornerRadius="0dp"
+        app:icon="@drawable/ic_check"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/event_detail_maybe_button"
         app:layout_constraintStart_toStartOf="parent" />
@@ -167,11 +178,11 @@
         android:id="@+id/event_detail_maybe_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/black"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="@color/freesia"
         android:insetBottom="0dp"
         android:text="@string/maybe"
         app:cornerRadius="0dp"
+        app:icon="@drawable/ic_question_mark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/event_detail_decline_button"
         app:layout_constraintStart_toEndOf="@id/event_detail_accept_button" />
@@ -180,11 +191,11 @@
         android:id="@+id/event_detail_decline_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/black"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="@color/red"
         android:insetBottom="0dp"
         android:text="@string/no"
         app:cornerRadius="0dp"
+        app:icon="@drawable/ic_close"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/event_detail_maybe_button" />

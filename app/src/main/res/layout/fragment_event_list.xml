@@ -22,33 +22,63 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/logout_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/ic_logout"
+        android:contentDescription="@string/logout_button"
+        app:layout_constraintBottom_toTopOf="@id/event_map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/event_map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        app:layout_constraintBottom_toTopOf="@id/events_list"
+        app:layout_constraintBottom_toTopOf="@id/events_list_fragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/events_list_title"
         tools:context=".MainActivity" />
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/events_list_fragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/event_map" />
+
+    <ImageView
+        android:id="@+id/events_slider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/ic_burger_menu"
+        android:contentDescription="@string/slider"
+        app:layout_constraintBottom_toTopOf="@id/events_list"
+        app:layout_constraintEnd_toEndOf="@id/events_list_fragment"
+        app:layout_constraintStart_toStartOf="@id/events_list_fragment"
+        app:layout_constraintTop_toTopOf="@id/events_list_fragment" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/events_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingTop="30dp"
-        android:radius="17dp"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/event_map"
+        app:layout_constraintBottom_toBottomOf="@id/events_list_fragment"
+        app:layout_constraintEnd_toEndOf="@id/events_list_fragment"
+        app:layout_constraintStart_toStartOf="@id/events_list_fragment"
+        app:layout_constraintTop_toBottomOf="@id/events_slider"
         tools:listitem="@layout/event_list_item" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/create_event_floating_button"
@@ -56,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
-            android:backgroundTint="@color/purple_500"
+            android:backgroundTint="?attr/colorSecondaryVariant"
             android:contentDescription="@string/create_event"
             app:srcCompat="@drawable/ic_add_white" />
 

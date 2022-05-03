@@ -66,6 +66,7 @@
         android:layout_height="0dp"
         android:layout_margin="16dp"
         android:text="@string/sign_in"
+        android:backgroundTint="?attr/colorPrimaryVariant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/user_login_password" />
@@ -85,7 +86,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="16dp"
-        android:backgroundTint="?attr/colorOnSecondary"
+        android:backgroundTint="?attr/colorSecondaryVariant"
         android:text="@string/sign_up"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

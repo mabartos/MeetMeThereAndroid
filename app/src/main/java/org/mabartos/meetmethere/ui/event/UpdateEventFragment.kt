@@ -11,17 +11,22 @@ import androidx.navigation.fragment.findNavController
 import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.Event
 import org.mabartos.meetmethere.databinding.FragmentEventUpdateBinding
-import org.mabartos.meetmethere.util.response
-import org.mabartos.meetmethere.util.toast
+import org.mabartos.meetmethere.util.*
 import org.mabartos.meetmethere.webservice.EventsApi
 import org.mabartos.meetmethere.webservice.RetrofitUtil
 import java.time.LocalDateTime
+import java.time.LocalTime
+import java.util.*
 
 class UpdateEventFragment(
     private val eventsApi: EventsApi = RetrofitUtil.createAqiWebService()
 ) : Fragment() {
 
     private lateinit var binding: FragmentEventUpdateBinding
+    private var startDate: Calendar? = null
+    private var endDate: Calendar? = null
+    private var startTime: LocalTime? = null
+    private var endTime: LocalTime? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +51,58 @@ class UpdateEventFragment(
         binding.eventUpdateName.hint = event.title
         binding.eventUpdateVenue.hint = event.venue
         binding.eventUpdateDescription.hint = event.description
+
+        binding.eventUpdateStartDay.hint = context?.formatDate("dd.MM", event.startTime)
+        binding.eventUpdateStartTime.hint = context?.formatTime(event.startTime.toLocalTime())
+        binding.eventUpdateEndDay.hint = context?.formatDate("dd.MM", event.endTime)
+        binding.eventUpdateEndTime.hint = context?.formatTime(event.endTime.toLocalTime())
+
+        binding.eventUpdateStartDayInput.setOnClickListener {
+            context?.datePicker(
+                parentFragmentManager,
+                title = R.string.start_day_settings.toString(),
+                onPositiveClick = { calendar ->
+                    startDate = calendar
+                    binding.eventUpdateStartDay.hint =
+                        context?.formatDate("dd.MM", calendar.time)
+                }
+            )
+        }
+
+        binding.eventUpdateStartTimeInput.setOnClickListener {
+            context?.timePicker(
+                parentFragmentManager,
+                requireContext(),
+                title = "Set start time",
+                onPositiveClick = { time ->
+                    startTime = time
+                    binding.eventUpdateStartTime.hint = context?.formatTime(time)
+                })
+        }
+
+        binding.eventUpdateEndDayInput.setOnClickListener {
+            context?.datePicker(
+                parentFragmentManager,
+                title = R.string.end_day_settings.toString(),
+                onPositiveClick = { calendar ->
+                    endDate = calendar
+                    binding.eventUpdateEndDay.hint =
+                        context?.formatDate("dd.MM", calendar.time)
+                }
+            )
+        }
+
+        binding.eventUpdateEndTimeInput.setOnClickListener {
+            context?.timePicker(
+                parentFragmentManager,
+                requireContext(),
+                title = "Set end time",
+                onPositiveClick = { time ->
+                    endTime = time
+                    binding.eventUpdateEndTime.hint = context?.formatTime(time)
+                })
+        }
+
 
         binding.eventUpdateSave.setOnClickListener {
             val titleText = binding.eventUpdateNameInput.text.toString()

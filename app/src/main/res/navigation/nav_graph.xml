@@ -18,6 +18,10 @@
             android:id="@+id/action_listFragment_to_createEventDialog"
             app:destination="@id/createEventFragment" />
 
+        <action
+            android:id="@+id/action_listFragment_to_loginFragment"
+            app:destination="@id/userLoginFragment" />
+
     </fragment>
 
     <fragment
@@ -33,6 +37,9 @@
         <action
             android:id="@+id/action_detail_to_updateEvent"
             app:destination="@id/updateEventFragment" />
+        <action
+            android:id="@+id/action_detail_to_listFragment"
+            app:destination="@id/listFragment" />
 
     </fragment>
 
@@ -47,7 +54,7 @@
         android:name="org.mabartos.meetmethere.ui.event.UpdateEventFragment"
         android:label="UpdateEventFragment"
         tools:layout="@layout/fragment_event_update"
-        
+
         >
         <argument
             android:name="event"

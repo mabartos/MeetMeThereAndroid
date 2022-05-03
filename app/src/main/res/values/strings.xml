@@ -5,6 +5,8 @@
     <string name="title_notifications">Notifications</string>
     <string name="accept">Accept</string>
     <string name="maybe">Maybe</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
     <string name="decline">Decline</string>
     <string name="events">Events</string>
     <string name="back_button">Back button</string>
@@ -35,4 +37,10 @@
     <string name="start_time_settings">Set event start time</string>
     <string name="end_day_settings">Set event end day</string>
     <string name="end_time_settings">Set event end time</string>
+    <string name="slider">Slider</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="deleteEventConfirmationMsg">Are you sure to delete this event?</string>
+    <string name="detail_attendance_question">Do you attend this event?</string>
+    <string name="logout_button">Logout Button</string>
 </resources>

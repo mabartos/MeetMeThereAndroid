@@ -2,6 +2,7 @@ package org.mabartos.meetmethere
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache
@@ -36,5 +37,10 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigation.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.bottomNavigation.isVisible = false
+            //binding.bottomNavigation.isVisible = destination.id == R.id.listFragment
+        }
     }
 }

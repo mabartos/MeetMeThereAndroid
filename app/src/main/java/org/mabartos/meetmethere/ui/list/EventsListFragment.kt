@@ -66,7 +66,7 @@ class EventsListFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
 
         requestCurrentLocation()
-        
+
         val adapter = EventsListAdapter(
             onItemClick = {
                 findNavController()
@@ -82,6 +82,10 @@ class EventsListFragment : Fragment(), OnMapReadyCallback {
         binding.eventsList.adapter = adapter
 
         adapter.submitList(eventsRepository.getMockedData())
+
+        binding.logoutButton.setOnClickListener {
+            findNavController().navigate(EventsListFragmentDirections.actionListFragmentToLoginFragment())
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -148,8 +152,6 @@ class EventsListFragment : Fragment(), OnMapReadyCallback {
 
                 Log.d(TAG, "getCurrentLocation() result: $result")
             }
-        } else {
-            // Request fine location permission (full code below).
         }
     }
 

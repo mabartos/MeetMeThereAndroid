@@ -109,6 +109,7 @@
         >
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/event_update_start_day_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="false"
@@ -130,6 +131,7 @@
         app:startIconDrawable="@drawable/ic_time">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/event_update_start_time_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="false"
@@ -162,6 +164,7 @@
         >
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/event_update_end_day_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="false"
@@ -183,6 +186,7 @@
         app:startIconDrawable="@drawable/ic_time">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/event_update_end_time_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="false"

@@ -6,6 +6,8 @@ import android.text.format.DateFormat
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -99,6 +101,21 @@ fun Context.formatDate(pattern: String, date: Date, locale: Locale = Locale.getD
     return try {
         val outputDateFormat = SimpleDateFormat(pattern, locale)
         outputDateFormat.format(date)
+    } catch (e: Throwable) {
+        print("Cannot format date")
+        "N/A"
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun Context.formatDate(
+    pattern: String,
+    date: LocalDateTime,
+    locale: Locale = Locale.getDefault()
+): String {
+    return try {
+        val outputDateFormat = DateTimeFormatter.ofPattern(pattern, locale)
+        date.format(outputDateFormat)
     } catch (e: Throwable) {
         print("Cannot format date")
         "N/A"

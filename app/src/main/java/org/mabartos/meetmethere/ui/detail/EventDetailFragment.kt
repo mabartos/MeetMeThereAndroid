@@ -5,11 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nostra13.universalimageloader.core.ImageLoader
-import org.mabartos.meetmethere.MainActivity
 import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.EventsListItem
 import org.mabartos.meetmethere.databinding.FragmentEventDetailBinding
@@ -70,9 +71,96 @@ class EventDetailFragment : Fragment() {
         binding.eventDetailTime.text = String.format("%s - %s", startTimeText, endTimeText)
         binding.eventDetailDescription.text = item.description
 
-        binding.eventDetailSettings.setOnClickListener {
-            println("HERE")
-            findNavController().navigate(EventDetailFragmentDirections.actionDetailToUpdateEvent(item))
+        binding.eventDetailEdit.setOnClickListener {
+            findNavController().navigate(
+                EventDetailFragmentDirections.actionDetailToUpdateEvent(
+                    item
+                )
+            )
+        }
+
+        binding.eventDetailDelete.setOnClickListener {
+            val title = resources.getString(R.string.delete) + " '${item.title}' ?"
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(title)
+                .setMessage(R.string.deleteEventConfirmationMsg)
+                .setNeutralButton(resources.getString(R.string.cancel)) { dialog, which ->
+                }
+                .setPositiveButton(
+                    resources.getString(R.string.confirm).uppercase()
+                ) { dialog, which ->
+                    findNavController().navigate(EventDetailFragmentDirections.actionDetailToListFragment())
+                    //TODO delete
+                }
+                .show()
+        }
+
+        when (item.responseType) {
+            "accept" -> {
+                changeAttendanceButtonsColors(binding.eventDetailAcceptButton)
+            }
+            "maybe" -> {
+                changeAttendanceButtonsColors(binding.eventDetailMaybeButton)
+            }
+            "decline" -> {
+                changeAttendanceButtonsColors(binding.eventDetailDeclineButton)
+            }
+        }
+
+        binding.eventDetailAcceptButton.setOnClickListener {
+            changeAttendanceButtonsColors(binding.eventDetailAcceptButton)
+            //TODO
+        }
+
+        binding.eventDetailMaybeButton.setOnClickListener {
+            changeAttendanceButtonsColors(binding.eventDetailMaybeButton)
+            //TODO
+        }
+
+        binding.eventDetailDeclineButton.setOnClickListener {
+            changeAttendanceButtonsColors(binding.eventDetailDeclineButton)
+            //TODO
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun changeAttendanceButtonsColors(button: Button) {
+        if (button == binding.eventDetailAcceptButton) {
+            binding.eventDetailAcceptButton.backgroundTintList =
+                context?.getColorStateList(R.color.green)
+            binding.eventDetailAcceptButton.setTextColor(context?.getColorStateList(R.color.white))
+
+            binding.eventDetailMaybeButton.backgroundTintList =
+                context?.getColorStateList(R.color.colorOnPrimary)
+            binding.eventDetailMaybeButton.setTextColor(context?.getColorStateList(R.color.colorTextOnPrimary))
+            binding.eventDetailDeclineButton.backgroundTintList =
+                context?.getColorStateList(R.color.colorOnPrimary)
+            binding.eventDetailDeclineButton.setTextColor(context?.getColorStateList(R.color.colorTextOnPrimary))
+
+        } else if (button == binding.eventDetailMaybeButton) {
+            binding.eventDetailMaybeButton.backgroundTintList =
+                context?.getColorStateList(R.color.freesia)
+            binding.eventDetailMaybeButton.setTextColor(context?.getColorStateList(R.color.white))
+
+            binding.eventDetailAcceptButton.backgroundTintList =
+                context?.getColorStateList(R.color.colorOnPrimary)
+            binding.eventDetailAcceptButton.setTextColor(context?.getColorStateList(R.color.colorTextOnPrimary))
+            binding.eventDetailDeclineButton.backgroundTintList =
+                context?.getColorStateList(R.color.colorOnPrimary)
+            binding.eventDetailDeclineButton.setTextColor(context?.getColorStateList(R.color.colorTextOnPrimary))
+
+        } else if (button == binding.eventDetailDeclineButton) {
+            binding.eventDetailDeclineButton.backgroundTintList =
+                context?.getColorStateList(R.color.red)
+            binding.eventDetailDeclineButton.setTextColor(context?.getColorStateList(R.color.white))
+
+            binding.eventDetailAcceptButton.backgroundTintList =
+                context?.getColorStateList(R.color.colorOnPrimary)
+            binding.eventDetailAcceptButton.setTextColor(context?.getColorStateList(R.color.colorTextOnPrimary))
+            binding.eventDetailMaybeButton.backgroundTintList =
+                context?.getColorStateList(R.color.colorOnPrimary)
+            binding.eventDetailMaybeButton.setTextColor(context?.getColorStateList(R.color.colorTextOnPrimary))
         }
     }
 }
