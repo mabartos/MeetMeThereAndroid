@@ -1,11 +1,9 @@
 package org.mabartos.meetmethere.ui.event
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.mabartos.meetmethere.R
@@ -19,7 +17,6 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
 
-@RequiresApi(Build.VERSION_CODES.O)
 class CreateEventFragment(
     private val eventService: EventService = EventServiceUtil.createService()
 ) : Fragment() {
@@ -39,7 +36,6 @@ class CreateEventFragment(
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.eventCreateToolbar.setNavigationIcon(R.drawable.ic_close)
         binding.eventCreateToolbar.setCollapseIcon(R.drawable.ic_burger_menu)

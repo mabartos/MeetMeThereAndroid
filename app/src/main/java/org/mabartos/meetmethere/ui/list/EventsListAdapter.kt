@@ -1,9 +1,7 @@
 package org.mabartos.meetmethere.ui.list
 
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import org.mabartos.meetmethere.data.event.EventsListItem
 import org.mabartos.meetmethere.databinding.EventListItemBinding
@@ -19,7 +17,6 @@ class EventsListAdapter(
         return EventsViewHolder(binding)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: EventsViewHolder, position: Int) {
         holder.bind(listItems[position], onItemClick)
     }

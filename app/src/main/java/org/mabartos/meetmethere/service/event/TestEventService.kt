@@ -1,14 +1,11 @@
 package org.mabartos.meetmethere.service.event
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import org.mabartos.meetmethere.data.event.Event
 import org.mabartos.meetmethere.data.event.EventResponseEnum
 import org.mabartos.meetmethere.data.event.EventsListItem
 import java.time.LocalDateTime
 import java.util.concurrent.ThreadLocalRandom
 
-@RequiresApi(Build.VERSION_CODES.O)
 class TestEventService : EventService {
 
     private val events: MutableList<EventsListItem> = getMockedData(10)

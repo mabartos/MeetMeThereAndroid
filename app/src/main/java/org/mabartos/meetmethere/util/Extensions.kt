@@ -1,32 +1,23 @@
 package org.mabartos.meetmethere.util
 
 import android.content.Context
-import android.os.Build
 import android.text.format.DateFormat
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.function.Consumer
-import java.util.function.Supplier
 
 fun Context.toast(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }
 
-@RequiresApi(Build.VERSION_CODES.N)
 fun Context.datePicker(
     fragmentManager: FragmentManager,
     title: String = "Set date",
@@ -48,7 +39,6 @@ fun Context.datePicker(
     picker.show(fragmentManager, picker.tag)
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun Context.timePicker(
     fragmentManager: FragmentManager,
     context: Context,
@@ -84,7 +74,6 @@ fun Context.formatDate(pattern: String, date: Date, locale: Locale = Locale.getD
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun Context.formatDate(
     pattern: String,
     date: LocalDateTime,
@@ -99,7 +88,6 @@ fun Context.formatDate(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun Context.formatTime(time: LocalTime, pattern: String = "HH:mm"): String {
     return try {
         val formatter = DateTimeFormatter.ofPattern(pattern)

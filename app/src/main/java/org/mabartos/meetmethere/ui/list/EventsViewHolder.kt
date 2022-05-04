@@ -1,7 +1,5 @@
 package org.mabartos.meetmethere.ui.list
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.nostra13.universalimageloader.core.ImageLoader
 import org.mabartos.meetmethere.data.event.EventsListItem
@@ -12,7 +10,6 @@ import java.time.format.DateTimeFormatter
 class EventsViewHolder(private val binding: EventListItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun bind(
         listItem: EventsListItem,
         onItemClick: (EventsListItem) -> Unit

@@ -1,7 +1,5 @@
 package org.mabartos.meetmethere.webservice
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -9,7 +7,6 @@ import java.util.function.Supplier
 
 object WebServiceUtil {
 
-    @RequiresApi(Build.VERSION_CODES.N)
     fun <T> response(
         supplier: Supplier<Call<T>>,
         onSuccess: (T) -> Unit,
