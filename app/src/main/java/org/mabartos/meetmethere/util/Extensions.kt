@@ -27,29 +27,6 @@ fun Context.toast(text: String) {
 }
 
 @RequiresApi(Build.VERSION_CODES.N)
-fun <T> Context.response(
-    supplier: Supplier<Call<T>>,
-    onSuccess: (T) -> Unit,
-    onFailure: (Throwable) -> Unit
-) {
-    supplier.get().enqueue(object : Callback<T> {
-
-        override fun onResponse(call: Call<T>, response: Response<T>) {
-            val responseBody = response.body()
-            if (response.isSuccessful && responseBody != null) {
-                onSuccess(responseBody)
-            } else {
-                onFailure(IllegalStateException("Response was not successful"))
-            }
-        }
-
-        override fun onFailure(call: Call<T>, t: Throwable) {
-            onFailure(t)
-        }
-    })
-}
-
-@RequiresApi(Build.VERSION_CODES.N)
 fun Context.datePicker(
     fragmentManager: FragmentManager,
     title: String = "Set date",

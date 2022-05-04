@@ -11,15 +11,16 @@ import androidx.navigation.fragment.findNavController
 import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.Event
 import org.mabartos.meetmethere.databinding.FragmentEventUpdateBinding
+import org.mabartos.meetmethere.service.EventService
+import org.mabartos.meetmethere.service.EventServiceUtil
 import org.mabartos.meetmethere.util.*
-import org.mabartos.meetmethere.webservice.EventsApi
-import org.mabartos.meetmethere.webservice.RetrofitUtil
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
 
+@RequiresApi(Build.VERSION_CODES.O)
 class UpdateEventFragment(
-    private val eventsApi: EventsApi = RetrofitUtil.createAqiWebService()
+    private val eventService: EventService = EventServiceUtil.createService()
 ) : Fragment() {
 
     private lateinit var binding: FragmentEventUpdateBinding
@@ -103,7 +104,6 @@ class UpdateEventFragment(
                 })
         }
 
-
         binding.eventUpdateSave.setOnClickListener {
             val titleText = binding.eventUpdateNameInput.text.toString()
             isUpdated = isUpdated or (titleText !== binding.eventUpdateName.hint.toString())
@@ -115,7 +115,7 @@ class UpdateEventFragment(
             isUpdated =
                 isUpdated or (descriptionText !== binding.eventUpdateDescription.hint.toString())
 
-            //TODO
+            //TODO DATE
             if (isUpdated) {
                 val updatedEvent =
                     Event(
@@ -127,21 +127,18 @@ class UpdateEventFragment(
                         longitude = 21.0,
                         latitude = 23.0,
                         startTime = LocalDateTime.of(2022, 10, 20, 20, 0),
-                        endTime = LocalDateTime.of(2022, 10, 20, 19, 0)
+                        endTime = LocalDateTime.of(2022, 10, 20, 19, 0),
+                        response = event.response
                     )
 
-                context?.response(supplier = { eventsApi.updateEvent(event.id, updatedEvent) },
-                    onSuccess = { id: Long ->
-                        context?.toast("OK - updated ${id}")
-                    },
+                eventService.callback(
+                    supplier = { eventService.updateEvent(event.id, updatedEvent) },
+                    onSuccess = { context?.toast("Event '${event.id}' updated") },
                     onFailure = { e ->
-                        context?.toast("Cannot update event")
-                    })
+                        context?.toast("Cannot update event. ${e.message}")
+                    }
+                )
             }
         }
-
-        //TODO time
-
-
     }
 }

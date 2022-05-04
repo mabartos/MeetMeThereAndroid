@@ -18,7 +18,7 @@ class EventsListItem(
     val updatedByName: String,
     val startTime: LocalDateTime,
     val endTime: LocalDateTime,
-    val responseType: String,
+    val response: String,
     val longitude: Double,
     val latitude: Double
 ) : Parcelable

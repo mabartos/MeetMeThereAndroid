@@ -10,16 +10,18 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.Event
+import org.mabartos.meetmethere.data.EventResponseEnum
 import org.mabartos.meetmethere.databinding.FragmentEventCreateBinding
+import org.mabartos.meetmethere.service.EventService
+import org.mabartos.meetmethere.service.EventServiceUtil
 import org.mabartos.meetmethere.util.*
-import org.mabartos.meetmethere.webservice.EventsApi
-import org.mabartos.meetmethere.webservice.RetrofitUtil
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
 
+@RequiresApi(Build.VERSION_CODES.O)
 class CreateEventFragment(
-    private val eventsApi: EventsApi = RetrofitUtil.createAqiWebService()
+    private val eventService: EventService = EventServiceUtil.createService()
 ) : Fragment() {
 
     private lateinit var binding: FragmentEventCreateBinding
@@ -121,19 +123,19 @@ class CreateEventFragment(
                         endTime!!.hour,
                         endTime!!.minute
                     ),
-                    isPublic = true,
+                    isPublic = true, //TODO
                     longitude = 20.0,
-                    latitude = 20.0
+                    latitude = 20.0,
+                    response = EventResponseEnum.ACCEPT.textForm
                 )
 
-            context?.response(
-                { eventsApi.createEvent(createEvent) },
-                onSuccess = { id: Long ->
-                    context?.toast("Event created ${id}")
-                },
-                onFailure = { e: Throwable ->
-                    println("Cannot create event. ${e.message}")
-                })
+            eventService.callback(
+                supplier = { eventService.createEvent(createEvent) },
+                onSuccess = { event -> context?.toast("Event '${event.title}' created") },
+                onFailure = { e ->
+                    context?.toast("Cannot create event. ${e.message}")
+                }
+            )
         }
 
     }

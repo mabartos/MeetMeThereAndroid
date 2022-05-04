@@ -13,11 +13,7 @@ class Event(
     val isPublic: Boolean,
     val startTime: LocalDateTime,
     val endTime: LocalDateTime,
+    val response: String,
     val longitude: Double,
     val latitude: Double
 ) : Parcelable
-
-data class EventResponse(
-    val status: String,
-    val data: Event
-)

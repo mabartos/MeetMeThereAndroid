@@ -29,24 +29,25 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.Task
 import org.mabartos.meetmethere.R
+import org.mabartos.meetmethere.data.EventsListItem
 import org.mabartos.meetmethere.databinding.FragmentEventListBinding
-import org.mabartos.meetmethere.repository.EventsRepository
+import org.mabartos.meetmethere.service.EventService
+import org.mabartos.meetmethere.service.EventServiceUtil
 
-
-class EventsListFragment : Fragment(), OnMapReadyCallback {
+@RequiresApi(Build.VERSION_CODES.O)
+class EventsListFragment(
+    private val eventService: EventService = EventServiceUtil.createService()
+) : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentEventListBinding
+    private lateinit var events: List<EventsListItem>
 
     private val fusedLocationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(requireContext())
     }
 
     private var cancellationTokenSource = CancellationTokenSource()
-
-    private val eventsRepository: EventsRepository by lazy {
-        EventsRepository(requireContext())
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,6 +65,7 @@ class EventsListFragment : Fragment(), OnMapReadyCallback {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        this.events = eventService.getEvents()
 
         requestCurrentLocation()
 
@@ -81,7 +83,7 @@ class EventsListFragment : Fragment(), OnMapReadyCallback {
         binding.eventsList.layoutManager = LinearLayoutManager(requireContext())
         binding.eventsList.adapter = adapter
 
-        adapter.submitList(eventsRepository.getMockedData())
+        adapter.submitList(this.events)
 
         binding.logoutButton.setOnClickListener {
             findNavController().navigate(EventsListFragmentDirections.actionListFragmentToLoginFragment())
@@ -93,7 +95,6 @@ class EventsListFragment : Fragment(), OnMapReadyCallback {
         mMap = googleMap
         mMap.uiSettings.isMyLocationButtonEnabled = true
 
-        val events = eventsRepository.getMockedData()
         val markers = mutableListOf<Marker?>()
 
         events.forEach {
