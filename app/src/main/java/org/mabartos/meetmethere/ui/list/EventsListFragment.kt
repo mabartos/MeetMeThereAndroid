@@ -1,6 +1,8 @@
 package org.mabartos.meetmethere.ui.list
 
 import android.Manifest
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
 import android.location.Location
@@ -8,8 +10,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,14 +35,20 @@ import org.mabartos.meetmethere.data.event.EventsListItem
 import org.mabartos.meetmethere.databinding.FragmentEventListBinding
 import org.mabartos.meetmethere.service.event.EventService
 import org.mabartos.meetmethere.service.event.EventServiceUtil
+import org.mabartos.meetmethere.util.formatDate
+import org.mabartos.meetmethere.util.formatTime
+import kotlin.math.hypot
+
 
 class EventsListFragment(
     private val eventService: EventService = EventServiceUtil.createService()
-) : Fragment(), OnMapReadyCallback {
+) : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentEventListBinding
     private lateinit var events: List<EventsListItem>
+
+    private var isMarkerSelected = false
 
     private val fusedLocationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(requireContext())
@@ -76,6 +86,11 @@ class EventsListFragment(
             findNavController().navigate(EventsListFragmentDirections.actionListFragmentToCreateEventDialog())
         }
 
+        binding.eventSelected.eventCardLayout.background =
+            ResourcesCompat.getDrawable(resources, R.color.freesia, null)
+        binding.eventSelected.eventImage.background =
+            ResourcesCompat.getDrawable(resources, R.color.tiffany_blue, null)
+
         binding.eventsList.layoutManager = LinearLayoutManager(requireContext())
         binding.eventsList.adapter = adapter
 
@@ -89,13 +104,24 @@ class EventsListFragment(
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.uiSettings.isMyLocationButtonEnabled = true
+        mMap.uiSettings.isZoomControlsEnabled = true
+        mMap.setOnMarkerClickListener(this)
+        mMap.setOnMapClickListener(this)
 
         val markers = mutableListOf<Marker?>()
 
         events.forEach {
             val options =
-                MarkerOptions().position(LatLng(it.latitude, it.longitude)).title(it.title)
-            markers.add(mMap.addMarker(options))
+                MarkerOptions()
+                    .position(LatLng(it.latitude, it.longitude))
+                    .title(it.title)
+                    .snippet(
+                        context?.formatDate("dd.MM - ", it.startTime) +
+                                context?.formatTime(it.startTime.toLocalTime())
+                    )
+            val marker: Marker? = mMap.addMarker(options)
+            marker?.tag = it
+            markers.add(marker)
         }
 
         val builder = LatLngBounds.Builder()
@@ -149,6 +175,56 @@ class EventsListFragment(
                 Log.d(TAG, "getCurrentLocation() result: $result")
             }
         }
+    }
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        isMarkerSelected = true
+        val event = marker.tag as EventsListItem
+
+        EventsViewHolder(binding.eventSelected).bind(event, onItemClick = {
+            findNavController()
+                .navigate(EventsListFragmentDirections.actionListFragmentToDetailFragment(event.id))
+        })
+
+        changeVisibility(View.VISIBLE)
+        return false
+    }
+
+    override fun onMapClick(coordinates: LatLng) {
+        if (isMarkerSelected) {
+            changeVisibility(View.GONE)
+            isMarkerSelected = false
+        }
+    }
+
+    private fun changeVisibility(visibility: Int) {
+        val cx: Int = binding.eventSelectedEventSection.width / 2
+        val cy: Int = binding.eventSelectedEventSection.height / 2
+
+        val maxRadius = hypot(cx.toDouble(), cy.toDouble()).toFloat()
+
+        val startRadius = if (visibility == View.VISIBLE) 0f else maxRadius
+        val finalRadius = if (visibility == View.VISIBLE) maxRadius else 0f
+
+        val anim = ViewAnimationUtils.createCircularReveal(
+            binding.eventSelectedEventSection,
+            cx,
+            cy,
+            startRadius,
+            finalRadius
+        )
+
+        if (visibility == View.VISIBLE) {
+            binding.eventSelectedEventSection.visibility = visibility
+        } else {
+            anim.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    super.onAnimationEnd(animation)
+                    binding.eventSelectedEventSection.visibility = View.GONE
+                }
+            })
+        }
+        anim.start()
     }
 
 }

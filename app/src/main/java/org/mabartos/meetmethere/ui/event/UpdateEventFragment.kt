@@ -67,7 +67,6 @@ class UpdateEventFragment(
         binding.eventUpdateStartTimeInput.setOnClickListener {
             context?.timePicker(
                 parentFragmentManager,
-                requireContext(),
                 title = "Set start time",
                 onPositiveClick = { time ->
                     startTime = time
@@ -90,7 +89,6 @@ class UpdateEventFragment(
         binding.eventUpdateEndTimeInput.setOnClickListener {
             context?.timePicker(
                 parentFragmentManager,
-                requireContext(),
                 title = "Set end time",
                 onPositiveClick = { time ->
                     endTime = time

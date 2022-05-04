@@ -2,6 +2,7 @@
 <resources>
     <color name="tiffany_blue">#A4E8E0</color>
     <color name="yellow">#F8EA8C</color>
+    <color name="yellow_light">#80F8EA8C</color>
     <color name="freesia">#E1C340</color>
     <color name="cyan">#4CD7D0</color>
     <color name="purple_200">#ffd8d7</color>

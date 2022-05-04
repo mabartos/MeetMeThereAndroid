@@ -41,11 +41,10 @@ fun Context.datePicker(
 
 fun Context.timePicker(
     fragmentManager: FragmentManager,
-    context: Context,
     onPositiveClick: Consumer<LocalTime>,
     title: String = "Set time",
     startSelection: LocalDateTime = LocalDateTime.now(),
-    system24Hour: Boolean = DateFormat.is24HourFormat(context)
+    system24Hour: Boolean = DateFormat.is24HourFormat(this)
 ) {
     val clockFormat = if (system24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
 
@@ -88,9 +87,13 @@ fun Context.formatDate(
     }
 }
 
-fun Context.formatTime(time: LocalTime, pattern: String = "HH:mm"): String {
+fun Context.formatTime(
+    time: LocalTime,
+    system24Hour: Boolean = DateFormat.is24HourFormat(this)
+): String {
     return try {
-        val formatter = DateTimeFormatter.ofPattern(pattern)
+        val clockFormat = if (system24Hour) "HH:mm" else "hh:mm a"
+        val formatter = DateTimeFormatter.ofPattern(clockFormat)
         time.format(formatter)
     } catch (e: Throwable) {
         print("Cannot format time")

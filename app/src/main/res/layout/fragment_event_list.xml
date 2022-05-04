@@ -57,13 +57,61 @@
         android:id="@+id/events_slider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="2dp"
         android:background="@drawable/ic_burger_menu"
         android:contentDescription="@string/slider"
-        app:layout_constraintBottom_toTopOf="@id/events_list"
+        app:layout_constraintBottom_toTopOf="@id/event_selected_event_section"
         app:layout_constraintEnd_toEndOf="@id/events_list_fragment"
         app:layout_constraintStart_toStartOf="@id/events_list_fragment"
         app:layout_constraintTop_toTopOf="@id/events_list_fragment" />
+
+    <LinearLayout
+        android:id="@+id/event_selected_event_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/yellow_light"
+        android:gravity="center"
+        android:paddingTop="4dp"
+        android:paddingBottom="8dp"
+        android:orientation="vertical"
+        android:textAlignment="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/events_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/events_slider">
+
+        <TextView
+            android:id="@+id/event_selected_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/list_selected_event_title"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <include
+            android:id="@+id/event_selected"
+            layout="@layout/event_list_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            tools:item="@layout/event_list_item" />
+
+      <!--  <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/event_selected_divider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:cornerRadius="10dp" />-->
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/events_list"
@@ -72,7 +120,7 @@
         app:layout_constraintBottom_toBottomOf="@id/events_list_fragment"
         app:layout_constraintEnd_toEndOf="@id/events_list_fragment"
         app:layout_constraintStart_toStartOf="@id/events_list_fragment"
-        app:layout_constraintTop_toBottomOf="@id/events_slider"
+        app:layout_constraintTop_toBottomOf="@id/event_selected_event_section"
         tools:listitem="@layout/event_list_item" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

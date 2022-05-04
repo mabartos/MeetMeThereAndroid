@@ -43,5 +43,6 @@
     <string name="deleteEventConfirmationMsg">Are you sure to delete this event?</string>
     <string name="deleteThisEventQuestion">Delete this event?</string>
     <string name="detail_attendance_question">Do you attend this event?</string>
+    <string name="list_selected_event_title">Currently selected event</string>
     <string name="logout_button">Logout Button</string>
 </resources>
