@@ -3,7 +3,8 @@ package org.mabartos.meetmethere.data.event
 enum class EventResponseEnum(val textForm: String) {
     ACCEPT("accepted"),
     MAYBE("maybe"),
-    DECLINE("declined");
+    DECLINE("declined"),
+    NOT_ANSWERED("not_answered");
 
     companion object {
         fun getByTextForm(textForm: String): EventResponseEnum? {

@@ -25,6 +25,7 @@ class EventDetailFragment(
 ) : Fragment() {
 
     private lateinit var binding: FragmentEventDetailBinding
+    private var currentResponse: EventResponseEnum? = EventResponseEnum.NOT_ANSWERED
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,7 +96,10 @@ class EventDetailFragment(
                 .show()
         }
 
-        when (EventResponseEnum.getByTextForm(item.response)) {
+        val response = EventResponseEnum.getByTextForm(item.response)
+        this.currentResponse = response
+
+        when (response) {
             EventResponseEnum.ACCEPT -> {
                 changeAttendanceButtonsColors(binding.eventDetailAcceptButton)
             }
@@ -105,26 +109,63 @@ class EventDetailFragment(
             EventResponseEnum.DECLINE -> {
                 changeAttendanceButtonsColors(binding.eventDetailDeclineButton)
             }
-            else -> {}
+            EventResponseEnum.NOT_ANSWERED -> {
+                clearAttendanceButtons()
+            }
+            else -> {
+                context?.toast("Unknown response type!")
+            }
         }
 
         binding.eventDetailAcceptButton.setOnClickListener {
             changeAttendanceButtonsColors(binding.eventDetailAcceptButton)
-            eventService.attendance(item.id, EventResponseEnum.ACCEPT)
+            currentResponse = checkCurrentResponse(item.id, EventResponseEnum.ACCEPT)
         }
 
         binding.eventDetailMaybeButton.setOnClickListener {
             changeAttendanceButtonsColors(binding.eventDetailMaybeButton)
-            eventService.attendance(item.id, EventResponseEnum.MAYBE)
+            currentResponse = checkCurrentResponse(item.id, EventResponseEnum.MAYBE)
         }
 
         binding.eventDetailDeclineButton.setOnClickListener {
             changeAttendanceButtonsColors(binding.eventDetailDeclineButton)
-            eventService.attendance(item.id, EventResponseEnum.DECLINE)
+            currentResponse = checkCurrentResponse(item.id, EventResponseEnum.DECLINE)
         }
     }
 
-    private fun changeAttendanceButtonsColors(button: Button) {
+    private fun checkCurrentResponse(
+        itemId: Long,
+        checkedEnum: EventResponseEnum
+    ): EventResponseEnum {
+        return if (currentResponse == checkedEnum) {
+            clearAttendanceButtons()
+            eventService.attendance(itemId, EventResponseEnum.NOT_ANSWERED)
+            EventResponseEnum.NOT_ANSWERED
+        } else {
+            eventService.attendance(itemId, checkedEnum)
+            checkedEnum
+        }
+    }
+
+    private fun clearAttendanceButtons() {
+        binding.eventDetailAcceptButton.backgroundTintList =
+            context?.getColorStateList(R.color.colorOnPrimary)
+        binding.eventDetailAcceptButton.setTextColor(context?.getColorStateList(R.color.colorTextOnPrimary))
+        binding.eventDetailMaybeButton.backgroundTintList =
+            context?.getColorStateList(R.color.colorOnPrimary)
+        binding.eventDetailMaybeButton.setTextColor(context?.getColorStateList(R.color.colorTextOnPrimary))
+        binding.eventDetailDeclineButton.backgroundTintList =
+            context?.getColorStateList(R.color.colorOnPrimary)
+        binding.eventDetailDeclineButton.setTextColor(context?.getColorStateList(R.color.colorTextOnPrimary))
+    }
+
+    // TODO Refactor
+    private fun changeAttendanceButtonsColors(button: Button?) {
+        if (button == null) {
+            clearAttendanceButtons()
+            return
+        }
+
         when (button) {
             binding.eventDetailAcceptButton -> {
                 binding.eventDetailAcceptButton.backgroundTintList =
