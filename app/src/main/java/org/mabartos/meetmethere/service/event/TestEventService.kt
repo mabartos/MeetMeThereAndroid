@@ -19,7 +19,7 @@ class TestEventService : EventService {
                 val item = EventsListItem(
                     id = it.toLong(),
                     title = "Event $it",
-                    description = "Description for event $it",
+                    description = "Description for event $it. This event is on a special venue and you need to bring your own instruments there. We have wine, beer and some kind of drugs.",
                     venue = "Amsterdam",
                     imageUrl = "https://thumbs.dreamstime.com/z/bottles-famous-global-beer-brands-poznan-pol-mar-including-heineken-becks-bud-miller-corona-stella-artois-san-miguel-143170440.jpg",
                     isPublic = it % 2 == 0,

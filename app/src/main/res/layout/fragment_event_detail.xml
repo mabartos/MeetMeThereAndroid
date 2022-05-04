@@ -51,11 +51,9 @@
     <ImageView
         android:id="@+id/event_detail_image"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="270dp"
         android:background="?attr/colorSecondary"
         android:contentDescription="@string/event_detail_image"
-        android:maxWidth="200dp"
-        android:maxHeight="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/event_detail_toolbar" />
