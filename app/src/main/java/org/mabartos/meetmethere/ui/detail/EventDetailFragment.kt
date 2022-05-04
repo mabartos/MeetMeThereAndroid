@@ -17,10 +17,10 @@ import org.mabartos.meetmethere.data.EventsListItem
 import org.mabartos.meetmethere.databinding.FragmentEventDetailBinding
 import org.mabartos.meetmethere.service.EventService
 import org.mabartos.meetmethere.service.EventServiceUtil
+import org.mabartos.meetmethere.util.formatDate
+import org.mabartos.meetmethere.util.formatTime
 import org.mabartos.meetmethere.util.toast
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 @RequiresApi(Build.VERSION_CODES.O)
 class EventDetailFragment(
@@ -65,10 +65,14 @@ class EventDetailFragment(
         val startTime: LocalDateTime = item.startTime
         val endTime: LocalDateTime = item.endTime
 
-        val startTimeText = startTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
-        val endTimeText = endTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+        binding.eventDetailStartTitle.text = resources.getText(R.string.start)
+        binding.eventDetailStartDate.text = context?.formatDate("dd.MM.yyyy", startTime)
+        binding.eventDetailStartTime.text = context?.formatTime(startTime.toLocalTime())
 
-        binding.eventDetailTime.text = String.format("%s - %s", startTimeText, endTimeText)
+        binding.eventDetailEndTitle.text = resources.getText(R.string.end)
+        binding.eventDetailEndDate.text = context?.formatDate("dd.MM.yyyy", endTime)
+        binding.eventDetailEndTime.text = context?.formatTime(endTime.toLocalTime())
+
         binding.eventDetailDescription.text = item.description
 
         binding.eventDetailEdit.setOnClickListener {
@@ -90,6 +94,7 @@ class EventDetailFragment(
                 ) { _, _ ->
                     findNavController().navigate(EventDetailFragmentDirections.actionDetailToListFragment())
                     eventService.removeEvent(item.id)
+                    context?.toast("Event was deleted")
                 }
                 .show()
         }
