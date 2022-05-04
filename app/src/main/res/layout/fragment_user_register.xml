@@ -108,7 +108,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:hint="@string/password_confirmation"
-        app:layout_constraintBottom_toTopOf="@id/user_register_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/user_register_password"

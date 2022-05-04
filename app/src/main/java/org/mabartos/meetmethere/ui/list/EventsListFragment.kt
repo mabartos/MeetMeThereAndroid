@@ -26,15 +26,15 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.Task
+import com.google.maps.android.clustering.ClusterManager
 import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.event.EventsListItem
 import org.mabartos.meetmethere.databinding.FragmentEventListBinding
 import org.mabartos.meetmethere.service.event.EventService
 import org.mabartos.meetmethere.service.event.EventServiceUtil
+import org.mabartos.meetmethere.util.ClusterEventItem
 import org.mabartos.meetmethere.util.formatDate
 import org.mabartos.meetmethere.util.formatTime
 import kotlin.math.hypot
@@ -42,13 +42,14 @@ import kotlin.math.hypot
 
 class EventsListFragment(
     private val eventService: EventService = EventServiceUtil.createService()
-) : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
+) : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentEventListBinding
     private lateinit var events: List<EventsListItem>
 
     private var isMarkerSelected = false
+    private lateinit var clusterManager: ClusterManager<ClusterEventItem>
 
     private val fusedLocationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(requireContext())
@@ -105,31 +106,33 @@ class EventsListFragment(
         mMap = googleMap
         mMap.uiSettings.isMyLocationButtonEnabled = true
         mMap.uiSettings.isZoomControlsEnabled = true
-        mMap.setOnMarkerClickListener(this)
+
+        clusterManager = ClusterManager(context, mMap)
+        mMap.setOnCameraIdleListener(clusterManager)
+        mMap.setOnMarkerClickListener(clusterManager)
+
+        clusterManager.setOnClusterItemClickListener { i -> onMarkerClick(i) }
         mMap.setOnMapClickListener(this)
 
-        val markers = mutableListOf<Marker?>()
+        val markers = mutableListOf<ClusterEventItem>()
 
         events.forEach {
-            val options =
-                MarkerOptions()
-                    .position(LatLng(it.latitude, it.longitude))
-                    .title(it.title)
-                    .snippet(
-                        context?.formatDate("dd.MM - ", it.startTime) +
-                                context?.formatTime(it.startTime.toLocalTime())
-                    )
-            val marker: Marker? = mMap.addMarker(options)
-            marker?.tag = it
+            val marker = ClusterEventItem(
+                it.latitude,
+                it.longitude,
+                it.title,
+                context?.formatDate("dd.MM - ", it.startTime) +
+                        context?.formatTime(it.startTime.toLocalTime()),
+                it
+            )
             markers.add(marker)
+            clusterManager.addItem(marker)
         }
 
         val builder = LatLngBounds.Builder()
 
         for (marker in markers) {
-            if (marker != null) {
-                builder.include(marker.position)
-            }
+            builder.include(marker.position)
         }
 
         val bounds = builder.build()
@@ -177,9 +180,9 @@ class EventsListFragment(
         }
     }
 
-    override fun onMarkerClick(marker: Marker): Boolean {
+    fun onMarkerClick(eventItem: ClusterEventItem): Boolean {
         isMarkerSelected = true
-        val event = marker.tag as EventsListItem
+        val event = eventItem.event
 
         EventsViewHolder(binding.eventSelected).bind(event, onItemClick = {
             findNavController()
