@@ -49,7 +49,7 @@ class EventsListFragment(
     private lateinit var events: List<EventsListItem>
 
     private var isMarkerSelected = false
-    private lateinit var clusterManager: ClusterManager<ClusterEventItem>
+    private var clusterManager: ClusterManager<ClusterEventItem>? = null
 
     private val fusedLocationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(requireContext())
@@ -107,11 +107,18 @@ class EventsListFragment(
         mMap.uiSettings.isMyLocationButtonEnabled = true
         mMap.uiSettings.isZoomControlsEnabled = true
 
-        clusterManager = ClusterManager(context, mMap)
+        if (clusterManager == null) {
+            clusterManager = ClusterManager(context, mMap)
+        }
+
+        clusterManager!!.clearItems()
+
+        clusterManager!!.setOnClusterItemClickListener { false }
+        clusterManager!!.setOnClusterClickListener { false }
         mMap.setOnCameraIdleListener(clusterManager)
         mMap.setOnMarkerClickListener(clusterManager)
 
-        clusterManager.setOnClusterItemClickListener { i -> onMarkerClick(i) }
+        clusterManager!!.setOnClusterItemClickListener { i -> onMarkerClick(i) }
         mMap.setOnMapClickListener(this)
 
         val markers = mutableListOf<ClusterEventItem>()
@@ -126,7 +133,7 @@ class EventsListFragment(
                 it
             )
             markers.add(marker)
-            clusterManager.addItem(marker)
+            clusterManager!!.addItem(marker)
         }
 
         val builder = LatLngBounds.Builder()
@@ -180,7 +187,7 @@ class EventsListFragment(
         }
     }
 
-    fun onMarkerClick(eventItem: ClusterEventItem): Boolean {
+    private fun onMarkerClick(eventItem: ClusterEventItem): Boolean {
         isMarkerSelected = true
         val event = eventItem.event
 
