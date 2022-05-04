@@ -41,6 +41,7 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="deleteEventConfirmationMsg">Are you sure to delete this event?</string>
+    <string name="deleteThisEventQuestion">Delete this event?</string>
     <string name="detail_attendance_question">Do you attend this event?</string>
     <string name="logout_button">Logout Button</string>
 </resources>

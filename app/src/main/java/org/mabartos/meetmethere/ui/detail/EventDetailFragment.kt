@@ -80,10 +80,8 @@ class EventDetailFragment(
         }
 
         binding.eventDetailDelete.setOnClickListener {
-            val title = resources.getString(R.string.delete) + " '${item.title}' ?"
-
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(title)
+                .setTitle(R.string.deleteThisEventQuestion)
                 .setMessage(R.string.deleteEventConfirmationMsg)
                 .setNeutralButton(resources.getString(R.string.cancel)) { _, _ ->
                 }

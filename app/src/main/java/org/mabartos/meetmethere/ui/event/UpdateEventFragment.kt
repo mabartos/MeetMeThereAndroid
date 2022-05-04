@@ -14,7 +14,6 @@ import org.mabartos.meetmethere.databinding.FragmentEventUpdateBinding
 import org.mabartos.meetmethere.service.EventService
 import org.mabartos.meetmethere.service.EventServiceUtil
 import org.mabartos.meetmethere.util.*
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
 
@@ -45,13 +44,12 @@ class UpdateEventFragment(
             findNavController().navigateUp()
         }
         binding.eventUpdateToolbar.title = "Update event"
-        var isUpdated = false
 
         val event = UpdateEventFragmentArgs.fromBundle(requireArguments()).event
 
-        binding.eventUpdateName.hint = event.title
-        binding.eventUpdateVenue.hint = event.venue
-        binding.eventUpdateDescription.hint = event.description
+        binding.eventUpdateTitleInput.hint = event.title
+        binding.eventUpdateVenueInput.hint = event.venue
+        binding.eventUpdateDescriptionInput.hint = event.description
 
         binding.eventUpdateStartDay.hint = context?.formatDate("dd.MM", event.startTime)
         binding.eventUpdateStartTime.hint = context?.formatTime(event.startTime.toLocalTime())
@@ -105,35 +103,35 @@ class UpdateEventFragment(
         }
 
         binding.eventUpdateSave.setOnClickListener {
-            val titleText = binding.eventUpdateNameInput.text.toString()
-            isUpdated = isUpdated or (titleText !== binding.eventUpdateName.hint.toString())
+            var isUpdated = false
+            val builder = Event.Builder(event.toEvent())
+
+            val titleText = binding.eventUpdateTitleInput.text.toString()
+            if (titleText.isNotBlank() && titleText != event.title) {
+                isUpdated = true
+                builder.title(titleText)
+            }
 
             val venueText = binding.eventUpdateVenueInput.text.toString()
-            isUpdated = isUpdated or (venueText !== binding.eventUpdateName.hint.toString())
+            if (venueText.isNotBlank() && venueText != event.venue) {
+                isUpdated = true
+                builder.venue(venueText)
+            }
 
             val descriptionText = binding.eventUpdateDescriptionInput.text.toString()
-            isUpdated =
-                isUpdated or (descriptionText !== binding.eventUpdateDescription.hint.toString())
+            if (descriptionText.isNotBlank() && descriptionText != event.description) {
+                isUpdated = true
+                builder.description(descriptionText)
+            }
 
             //TODO DATE
             if (isUpdated) {
-                val updatedEvent =
-                    Event(
-                        title = titleText,
-                        venue = venueText,
-                        description = descriptionText,
-                        isPublic = true,
-                        imageUrl = "some",
-                        longitude = 21.0,
-                        latitude = 23.0,
-                        startTime = LocalDateTime.of(2022, 10, 20, 20, 0),
-                        endTime = LocalDateTime.of(2022, 10, 20, 19, 0),
-                        response = event.response
-                    )
-
                 eventService.callback(
-                    supplier = { eventService.updateEvent(event.id, updatedEvent) },
-                    onSuccess = { context?.toast("Event '${event.id}' updated") },
+                    supplier = { eventService.updateEvent(event.id, builder.build()) },
+                    onSuccess = {
+                        context?.toast("Event updated");
+                        findNavController().navigateUp()
+                    },
                     onFailure = { e ->
                         context?.toast("Cannot update event. ${e.message}")
                     }

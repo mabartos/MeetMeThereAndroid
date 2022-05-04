@@ -21,4 +21,26 @@ class EventsListItem(
     val response: String,
     val longitude: Double,
     val latitude: Double
-) : Parcelable
+) : Parcelable {
+
+    fun toEvent(): Event {
+        return toEvent(this)
+    }
+
+    companion object {
+        fun toEvent(item: EventsListItem): Event {
+            return Event(
+                title = item.title,
+                venue = item.venue,
+                imageUrl = item.imageUrl,
+                description = item.description,
+                isPublic = item.isPublic,
+                startTime = item.startTime,
+                endTime = item.endTime,
+                response = item.response,
+                longitude = item.longitude,
+                latitude = item.latitude
+            )
+        }
+    }
+}

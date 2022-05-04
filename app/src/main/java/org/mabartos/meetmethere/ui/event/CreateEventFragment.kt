@@ -131,7 +131,10 @@ class CreateEventFragment(
 
             eventService.callback(
                 supplier = { eventService.createEvent(createEvent) },
-                onSuccess = { event -> context?.toast("Event '${event.title}' created") },
+                onSuccess = { event ->
+                    context?.toast("Event '${event.title}' created");
+                    findNavController().navigateUp()
+                },
                 onFailure = { e ->
                     context?.toast("Cannot create event. ${e.message}")
                 }

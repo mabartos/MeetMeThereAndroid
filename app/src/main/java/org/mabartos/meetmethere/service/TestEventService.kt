@@ -42,7 +42,7 @@ class TestEventService : EventService {
 
     override fun getEvent(id: Long): EventsListItem? {
         if (isInvalidIndex(id)) return null
-        return events[id.toInt()]
+        return events.find { event -> event.id == id }
     }
 
     override fun removeEvent(id: Long) {

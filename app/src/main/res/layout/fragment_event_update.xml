@@ -2,8 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/event_update_toolbar"
@@ -28,22 +27,20 @@
         app:layout_constraintBottom_toBottomOf="@id/event_update_toolbar"
         app:layout_constraintEnd_toEndOf="@id/event_update_toolbar"
         app:layout_constraintTop_toTopOf="@id/event_update_toolbar"
-        app:tint="@color/black"
-        tools:ignore="ContentDescription" />
+        app:tint="@color/black" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/event_update_name"
+        android:id="@+id/event_update_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:hint="@string/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/event_update_toolbar"
         app:startIconDrawable="@drawable/ic_event">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/event_update_name_input"
+            android:id="@+id/event_update_title_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -54,10 +51,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:hint="@string/venue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/event_update_name"
+        app:layout_constraintTop_toBottomOf="@id/event_update_title"
         app:startIconDrawable="@drawable/ic_home">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -72,7 +68,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:hint="@string/description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/event_update_venue">
@@ -105,8 +100,7 @@
         app:layout_constraintEnd_toStartOf="@id/event_update_start_time"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/event_update_start_title"
-        app:startIconDrawable="@drawable/ic_calendar_day"
-        >
+        app:startIconDrawable="@drawable/ic_calendar_day">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/event_update_start_day_input"
@@ -160,8 +154,7 @@
         app:layout_constraintEnd_toStartOf="@id/event_update_end_time"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/event_update_end_title"
-        app:startIconDrawable="@drawable/ic_calendar_day"
-        >
+        app:startIconDrawable="@drawable/ic_calendar_day">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/event_update_end_day_input"
