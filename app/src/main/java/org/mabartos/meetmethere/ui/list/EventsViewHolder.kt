@@ -4,8 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.nostra13.universalimageloader.core.ImageLoader
-import org.mabartos.meetmethere.MainActivity
-import org.mabartos.meetmethere.data.EventsListItem
+import org.mabartos.meetmethere.data.event.EventsListItem
 import org.mabartos.meetmethere.databinding.EventListItemBinding
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

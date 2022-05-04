@@ -1,20 +1,21 @@
-package org.mabartos.meetmethere.service
+package org.mabartos.meetmethere.service.user
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 
-class EventServiceUtil {
+class UserServiceUtil {
 
     companion object {
-        private var service: EventService? = null
+        private var service: UserService? = null
 
         @RequiresApi(Build.VERSION_CODES.O)
-        fun createService(): EventService {
+        fun createService(): UserService {
             if (service == null) {
-                service = TestEventService()
+                service = TestUserService()
             }
             return service!!
         }
 
     }
+
 }

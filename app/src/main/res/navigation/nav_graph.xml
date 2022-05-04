@@ -58,7 +58,7 @@
         >
         <argument
             android:name="event"
-            app:argType="org.mabartos.meetmethere.data.EventsListItem" />
+            app:argType="org.mabartos.meetmethere.data.event.EventsListItem" />
     </fragment>
 
     <fragment

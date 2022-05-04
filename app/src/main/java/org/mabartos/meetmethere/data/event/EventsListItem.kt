@@ -1,4 +1,4 @@
-package org.mabartos.meetmethere.data
+package org.mabartos.meetmethere.data.event
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

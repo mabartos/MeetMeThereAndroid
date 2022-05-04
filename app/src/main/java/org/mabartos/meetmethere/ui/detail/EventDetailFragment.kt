@@ -12,11 +12,11 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nostra13.universalimageloader.core.ImageLoader
 import org.mabartos.meetmethere.R
-import org.mabartos.meetmethere.data.EventResponseEnum
-import org.mabartos.meetmethere.data.EventsListItem
+import org.mabartos.meetmethere.data.event.EventResponseEnum
+import org.mabartos.meetmethere.data.event.EventsListItem
 import org.mabartos.meetmethere.databinding.FragmentEventDetailBinding
-import org.mabartos.meetmethere.service.EventService
-import org.mabartos.meetmethere.service.EventServiceUtil
+import org.mabartos.meetmethere.service.event.EventService
+import org.mabartos.meetmethere.service.event.EventServiceUtil
 import org.mabartos.meetmethere.util.formatDate
 import org.mabartos.meetmethere.util.formatTime
 import org.mabartos.meetmethere.util.toast
@@ -114,17 +114,17 @@ class EventDetailFragment(
 
         binding.eventDetailAcceptButton.setOnClickListener {
             changeAttendanceButtonsColors(binding.eventDetailAcceptButton)
-            //TODO
+            eventService.attendance(item.id, EventResponseEnum.ACCEPT)
         }
 
         binding.eventDetailMaybeButton.setOnClickListener {
             changeAttendanceButtonsColors(binding.eventDetailMaybeButton)
-            //TODO
+            eventService.attendance(item.id, EventResponseEnum.MAYBE)
         }
 
         binding.eventDetailDeclineButton.setOnClickListener {
             changeAttendanceButtonsColors(binding.eventDetailDeclineButton)
-            //TODO
+            eventService.attendance(item.id, EventResponseEnum.DECLINE)
         }
     }
 

@@ -29,10 +29,10 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.Task
 import org.mabartos.meetmethere.R
-import org.mabartos.meetmethere.data.EventsListItem
+import org.mabartos.meetmethere.data.event.EventsListItem
 import org.mabartos.meetmethere.databinding.FragmentEventListBinding
-import org.mabartos.meetmethere.service.EventService
-import org.mabartos.meetmethere.service.EventServiceUtil
+import org.mabartos.meetmethere.service.event.EventService
+import org.mabartos.meetmethere.service.event.EventServiceUtil
 
 @RequiresApi(Build.VERSION_CODES.O)
 class EventsListFragment(
@@ -70,9 +70,9 @@ class EventsListFragment(
         requestCurrentLocation()
 
         val adapter = EventsListAdapter(
-            onItemClick = {
+            onItemClick = { event ->
                 findNavController()
-                    .navigate(EventsListFragmentDirections.actionListFragmentToDetailFragment(it.id))
+                    .navigate(EventsListFragmentDirections.actionListFragmentToDetailFragment(event.id))
             },
         )
 

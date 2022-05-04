@@ -1,7 +1,7 @@
 package org.mabartos.meetmethere.webservice
 
-import org.mabartos.meetmethere.data.Event
-import org.mabartos.meetmethere.data.EventsListItem
+import org.mabartos.meetmethere.data.event.Event
+import org.mabartos.meetmethere.data.event.EventsListItem
 import retrofit2.Call
 import retrofit2.http.*
 

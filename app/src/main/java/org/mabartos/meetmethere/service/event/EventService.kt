@@ -1,7 +1,8 @@
-package org.mabartos.meetmethere.service
+package org.mabartos.meetmethere.service.event
 
-import org.mabartos.meetmethere.data.Event
-import org.mabartos.meetmethere.data.EventsListItem
+import org.mabartos.meetmethere.data.event.Event
+import org.mabartos.meetmethere.data.event.EventResponseEnum
+import org.mabartos.meetmethere.data.event.EventsListItem
 
 interface EventService {
     fun getEvents(): List<EventsListItem>
@@ -9,6 +10,8 @@ interface EventService {
     fun removeEvent(id: Long)
     fun updateEvent(id: Long, event: Event)
     fun createEvent(event: Event): EventsListItem
+
+    fun attendance(id: Long, state: EventResponseEnum)
 
     fun <T> callback(
         supplier: () -> T,

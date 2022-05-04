@@ -1,9 +1,10 @@
-package org.mabartos.meetmethere.service
+package org.mabartos.meetmethere.service.event
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import org.mabartos.meetmethere.data.Event
-import org.mabartos.meetmethere.data.EventsListItem
+import org.mabartos.meetmethere.data.event.Event
+import org.mabartos.meetmethere.data.event.EventResponseEnum
+import org.mabartos.meetmethere.data.event.EventsListItem
 import java.time.LocalDateTime
 import java.util.concurrent.ThreadLocalRandom
 
@@ -51,14 +52,27 @@ class TestEventService : EventService {
     }
 
     override fun updateEvent(id: Long, event: Event) {
-        if (isInvalidIndex(id)) return
-        events[id.toInt()] = mapEventToEventItem(id, event)
+        val found = getEvent(id)
+        if (found != null) {
+            val index = events.indexOf(found)
+            if (index != -1) {
+                events[index] = mapEventToEventItem(id, Event.Builder(event).build())
+                return
+            }
+        }
     }
 
     override fun createEvent(event: Event): EventsListItem {
         val eventItem = mapEventToEventItem(event.hashCode().toLong(), event)
         events.add(eventItem)
         return eventItem
+    }
+
+    override fun attendance(id: Long, state: EventResponseEnum) {
+        val event = getEvent(id)
+        if (event != null && event.response != state.textForm) {
+            updateEvent(id, Event.Builder(event.toEvent()).response(state.textForm).build())
+        }
     }
 
     override fun <T> callback(

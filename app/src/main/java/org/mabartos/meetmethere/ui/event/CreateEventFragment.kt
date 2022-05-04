@@ -9,11 +9,11 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.mabartos.meetmethere.R
-import org.mabartos.meetmethere.data.Event
-import org.mabartos.meetmethere.data.EventResponseEnum
+import org.mabartos.meetmethere.data.event.Event
+import org.mabartos.meetmethere.data.event.EventResponseEnum
 import org.mabartos.meetmethere.databinding.FragmentEventCreateBinding
-import org.mabartos.meetmethere.service.EventService
-import org.mabartos.meetmethere.service.EventServiceUtil
+import org.mabartos.meetmethere.service.event.EventService
+import org.mabartos.meetmethere.service.event.EventServiceUtil
 import org.mabartos.meetmethere.util.*
 import java.time.LocalDateTime
 import java.time.LocalTime

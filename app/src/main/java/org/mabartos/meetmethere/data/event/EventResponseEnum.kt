@@ -1,4 +1,4 @@
-package org.mabartos.meetmethere.data
+package org.mabartos.meetmethere.data.event
 
 enum class EventResponseEnum(val textForm: String) {
     ACCEPT("accepted"),
