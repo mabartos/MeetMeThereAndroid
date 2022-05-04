@@ -1,6 +1,7 @@
 package org.mabartos.meetmethere.ui.event
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,9 +44,9 @@ class UpdateEventFragment(
 
         val event = UpdateEventFragmentArgs.fromBundle(requireArguments()).event
 
-        binding.eventUpdateTitleInput.hint = event.title
-        binding.eventUpdateVenueInput.hint = event.venue
-        binding.eventUpdateDescriptionInput.hint = event.description
+        binding.eventUpdateTitleInput.setText(event.title)
+        binding.eventUpdateVenueInput.setText(event.venue)
+        binding.eventUpdateDescriptionInput.setText(event.description)
 
         binding.eventUpdateStartDay.hint = context?.formatDate("dd.MM", event.startTime)
         binding.eventUpdateStartTime.hint = context?.formatTime(event.startTime.toLocalTime())
