@@ -11,9 +11,10 @@ interface UserService {
 
     fun findByEmail(email: String): User?
 
-    fun login(username: String, password: String): String
+    fun login(username: String, password: String): Boolean
 
-    fun register(user: CreateUser): User?
+    @Throws(ModelDuplicateException::class)
+    fun register(user: CreateUser): Boolean
 
     fun getInfo(): User?
 

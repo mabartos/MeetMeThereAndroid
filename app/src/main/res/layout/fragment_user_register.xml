@@ -26,6 +26,7 @@
         app:startIconDrawable="@drawable/ic_person">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/user_register_username_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -44,6 +45,7 @@
         app:startIconDrawable="@drawable/ic_email">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/user_register_email_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -61,6 +63,7 @@
         app:layout_constraintTop_toBottomOf="@id/user_register_email">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/user_register_firstname_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -78,6 +81,7 @@
         app:layout_constraintTop_toBottomOf="@id/user_register_firstname">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/user_register_lastname_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -96,9 +100,10 @@
         app:startIconDrawable="@drawable/ic_lock">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/user_register_password_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -111,14 +116,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/user_register_password"
-        app:startIconDrawable="@drawable/ic_lock"
-        >
+        app:startIconDrawable="@drawable/ic_lock">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/user_register_password_confirm_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            />
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -129,8 +133,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="4dp"
-        android:text="@string/register"
         android:backgroundTint="?attr/colorPrimaryVariant"
+        android:text="@string/register"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

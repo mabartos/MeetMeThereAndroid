@@ -1,10 +1,12 @@
 package org.mabartos.meetmethere.util
 
 import android.content.Context
+import android.text.Editable
 import android.text.format.DateFormat
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import java.text.SimpleDateFormat

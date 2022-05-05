@@ -45,4 +45,12 @@
     <string name="detail_attendance_question">Do you attend this event?</string>
     <string name="list_selected_event_title">Currently selected event</string>
     <string name="logout_button">Logout Button</string>
+    <string name="missing_username">You need to specify username</string>
+    <string name="missing_email">You need to specify email</string>
+    <string name="missing_password">You need to specify password</string>
+    <string name="missing_password_confirmation">You need to confirm password</string>
+    <string name="passwords_not_match">Password confirmation does not match password</string>
+    <string name="wrong_login">Invalid password or user does not exist</string>
+    <string name="duplicate_username">This username is already in use</string>
+    <string name="duplicate_email">This email is already in use</string>
 </resources>

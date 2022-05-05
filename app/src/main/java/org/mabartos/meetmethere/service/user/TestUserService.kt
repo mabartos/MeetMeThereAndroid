@@ -2,6 +2,7 @@ package org.mabartos.meetmethere.service.user
 
 import org.mabartos.meetmethere.data.user.CreateUser
 import org.mabartos.meetmethere.data.user.User
+import java.util.*
 
 class TestUserService : UserService {
 
@@ -24,6 +25,18 @@ class TestUserService : UserService {
                 )
                 add(user)
             }
+            add(
+                User(
+                    id = Int.MAX_VALUE.toLong(),
+                    username = "admin",
+                    email = "admin@admin",
+                    password = "admin",
+                    firstName = "Admin",
+                    lastName = "Admin",
+                    organizedEvents = HashSet(),
+                    attributes = HashMap()
+                )
+            )
         }
 
     override fun findByUsername(username: String): User? =
@@ -32,23 +45,30 @@ class TestUserService : UserService {
     override fun findById(id: Long): User? = users.find { u -> u.id == id }
     override fun findByEmail(email: String): User? = users.find { u -> u.email == email }
 
-    override fun login(username: String, password: String): String {
+    override fun login(username: String, password: String): Boolean {
         val user = findByUsername(username)
         if (user != null && user.password == password) {
-            this.token = "token123"
+            this.token = UUID.randomUUID().toString()
             this.currentUser = user
-            return token!!
+            return true
         }
-        return ""
+        return false
     }
 
-    override fun register(user: CreateUser): User? {
-        if (findByUsername(user.username) == null && findByEmail(user.email) == null) {
-            val converted: User = mapCreateUserToUser(user.hashCode().toLong(), user)
-            users.add(converted)
-            return converted
+    @Throws(ModelDuplicateException::class)
+    override fun register(user: CreateUser): Boolean {
+        if (findByUsername(user.username) != null) {
+            throw ModelDuplicateException("This username is already in use", "username")
         }
-        return null
+
+        if (findByEmail(user.email) != null) {
+            throw ModelDuplicateException("This email is already in use", "email")
+        }
+
+        val converted: User = mapCreateUserToUser(user.hashCode().toLong(), user)
+        this.currentUser = converted
+        users.add(converted)
+        return true
     }
 
     override fun getInfo(): User? {
@@ -75,9 +95,5 @@ class TestUserService : UserService {
             organizedEvents = HashSet(),
             attributes = HashMap()
         )
-    }
-
-    private fun isInvalidIndex(id: Long): Boolean {
-        return id < 0 || id >= users.size
     }
 }
