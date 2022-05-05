@@ -62,4 +62,6 @@
     <string name="user_profile_title">User profile</string>
     <string name="edit_user_attributes">Edit attributes</string>
     <string name="change_password">Change password</string>
+    <string name="my_organized_events">My organized events</string>
+    <string name="no_organized_events">No events yet 😔</string>
 </resources>

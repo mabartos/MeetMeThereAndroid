@@ -77,7 +77,7 @@ class UserEditFragment(
 
             if (username.toString() != user.username) {
                 val foundUsername = userService.findByUsername(username = username.toString())
-                if (foundUsername != null || foundUsername != user) {
+                if (foundUsername != null) {
                     binding.userUpdateUsername.error =
                         resources.getString(R.string.duplicate_username)
                     return@setOnClickListener
@@ -88,7 +88,7 @@ class UserEditFragment(
 
             if (email.toString() != user.email) {
                 val foundEmail = userService.findByEmail(email = email.toString())
-                if (foundEmail != null || foundEmail != user) {
+                if (foundEmail != null) {
                     binding.userUpdateEmail.error =
                         resources.getString(R.string.duplicate_email)
                 }

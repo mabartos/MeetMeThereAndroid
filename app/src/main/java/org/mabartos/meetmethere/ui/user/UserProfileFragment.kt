@@ -58,6 +58,14 @@ class UserProfileFragment(
 
         //TODO click handlers
 
+        binding.userProfileOrganizedButton.setOnClickListener {
+            findNavController().navigate(
+                UserProfileFragmentDirections.actionProfileEditToOrganizedEvents(
+                    user
+                )
+            )
+        }
+
         binding.userProfileEditButton.setOnClickListener {
             findNavController().navigate(UserProfileFragmentDirections.actionUserProfileToProfileEdit())
         }

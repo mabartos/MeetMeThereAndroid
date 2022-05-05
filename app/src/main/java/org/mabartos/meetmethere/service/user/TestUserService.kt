@@ -25,6 +25,8 @@ class TestUserService : UserService {
                 )
                 add(user)
             }
+
+            val adminOrganizedEvents: Set<Long> = mutableSetOf(0, 1)
             add(
                 User(
                     id = Int.MAX_VALUE.toLong(),
@@ -33,7 +35,7 @@ class TestUserService : UserService {
                     password = "admin",
                     firstName = "Admin",
                     lastName = "Admin",
-                    organizedEvents = HashSet(),
+                    organizedEvents = adminOrganizedEvents,
                     attributes = HashMap()
                 )
             )

@@ -105,6 +105,10 @@
         <action
             android:id="@+id/action_userProfile_to_profileEdit"
             app:destination="@id/userProfileEditFragment" />
+
+        <action
+            android:id="@+id/action_profileEdit_to_organizedEvents"
+            app:destination="@id/userOrganizedEventsFragment" />
     </fragment>
 
     <fragment
@@ -113,5 +117,19 @@
         android:label="UserProfileEditFragment"
         tools:layout="@layout/fragment_user_edit" />
 
+    <fragment
+        android:id="@+id/userOrganizedEventsFragment"
+        android:name="org.mabartos.meetmethere.ui.user.OrganizedEventsFragment"
+        android:label="UserOrganizedEventsFragment"
+        tools:layout="@layout/fragment_organized_events">
+
+        <argument
+            android:name="user"
+            app:argType="org.mabartos.meetmethere.data.user.User" />
+
+        <action
+            android:id="@+id/action_userOrganizedEventsFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
 
 </navigation>
