@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.event.Event
 import org.mabartos.meetmethere.databinding.FragmentEventUpdateBinding
+import org.mabartos.meetmethere.service.ServiceUtil
 import org.mabartos.meetmethere.service.event.EventService
 import org.mabartos.meetmethere.service.event.EventServiceUtil
 import org.mabartos.meetmethere.util.*
@@ -121,7 +122,7 @@ class UpdateEventFragment(
 
             //TODO DATE
             if (isUpdated) {
-                eventService.callback(
+                ServiceUtil.callback(
                     supplier = { eventService.updateEvent(event.id, builder.build()) },
                     onSuccess = {
                         context?.toast("Event updated");

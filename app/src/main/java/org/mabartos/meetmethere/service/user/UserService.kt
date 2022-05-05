@@ -21,4 +21,6 @@ interface UserService {
     fun updateUser(user: User)
 
     fun logout()
+
+    fun getCurrentUser(): User?
 }

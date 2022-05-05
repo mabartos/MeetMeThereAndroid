@@ -18,7 +18,7 @@ class Event(
     val latitude: Double
 ) : Parcelable {
 
-    class Builder(private val event: Event) {
+    class Builder(event: Event) {
         private var title: String = event.title;
         private var venue: String = event.venue;
         private var imageUrl: String = event.imageUrl;

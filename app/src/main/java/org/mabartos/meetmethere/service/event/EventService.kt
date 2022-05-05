@@ -12,10 +12,4 @@ interface EventService {
     fun createEvent(event: Event): EventsListItem
 
     fun attendance(id: Long, state: EventResponseEnum)
-
-    fun <T> callback(
-        supplier: () -> T,
-        onSuccess: (T) -> Unit,
-        onFailure: (Throwable) -> Unit
-    )
 }

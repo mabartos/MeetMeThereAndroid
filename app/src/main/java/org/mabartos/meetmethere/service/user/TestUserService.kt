@@ -76,12 +76,26 @@ class TestUserService : UserService {
     }
 
     override fun updateUser(user: User) {
-        //findById(user.id)
+        val found = findById(user.id)
+        if (found != null) {
+            val index = users.indexOf(found)
+            if (index != -1) {
+                users[index] = user
+                return
+            }
+        }
     }
 
     override fun logout() {
         this.token = null
         this.currentUser = null
+    }
+
+    override fun getCurrentUser(): User? {
+        if (currentUser != null) {
+            currentUser = findById(currentUser!!.id)
+        }
+        return currentUser
     }
 
     private fun mapCreateUserToUser(id: Long, createUser: CreateUser): User {

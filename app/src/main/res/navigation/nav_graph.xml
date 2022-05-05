@@ -22,6 +22,10 @@
             android:id="@+id/action_listFragment_to_loginFragment"
             app:destination="@id/userLoginFragment" />
 
+        <action
+            android:id="@+id/action_listFragment_to_userProfile"
+            app:destination="@id/userProfileFragment" />
+
     </fragment>
 
     <fragment
@@ -87,6 +91,27 @@
             app:destination="@id/userRegisterFragment" />
 
     </fragment>
+
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="org.mabartos.meetmethere.ui.user.UserProfileFragment"
+        android:label="UserProfileFragment"
+        tools:layout="@layout/fragment_user_profile">
+
+        <action
+            android:id="@+id/action_userProfile_to_login"
+            app:destination="@id/userLoginFragment" />
+
+        <action
+            android:id="@+id/action_userProfile_to_profileEdit"
+            app:destination="@id/userProfileEditFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userProfileEditFragment"
+        android:name="org.mabartos.meetmethere.ui.user.UserEditFragment"
+        android:label="UserProfileEditFragment"
+        tools:layout="@layout/fragment_user_edit" />
 
 
 </navigation>

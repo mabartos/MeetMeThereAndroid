@@ -37,6 +37,7 @@ import org.mabartos.meetmethere.service.event.EventServiceUtil
 import org.mabartos.meetmethere.util.ClusterEventItem
 import org.mabartos.meetmethere.util.formatDate
 import org.mabartos.meetmethere.util.formatTime
+import org.mabartos.meetmethere.util.toast
 import kotlin.math.hypot
 
 
@@ -97,8 +98,13 @@ class EventsListFragment(
 
         adapter.submitList(this.events)
 
+        binding.profileButton.setOnClickListener {
+            findNavController().navigate(EventsListFragmentDirections.actionListFragmentToUserProfile())
+        }
+
         binding.logoutButton.setOnClickListener {
             findNavController().navigate(EventsListFragmentDirections.actionListFragmentToLoginFragment())
+            context?.toast(resources.getString(R.string.signed_off_note))
         }
     }
 

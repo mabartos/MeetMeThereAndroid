@@ -10,6 +10,7 @@ import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.event.Event
 import org.mabartos.meetmethere.data.event.EventResponseEnum
 import org.mabartos.meetmethere.databinding.FragmentEventCreateBinding
+import org.mabartos.meetmethere.service.ServiceUtil
 import org.mabartos.meetmethere.service.event.EventService
 import org.mabartos.meetmethere.service.event.EventServiceUtil
 import org.mabartos.meetmethere.util.*
@@ -123,7 +124,7 @@ class CreateEventFragment(
                     response = EventResponseEnum.ACCEPT.textForm
                 )
 
-            eventService.callback(
+            ServiceUtil.callback(
                 supplier = { eventService.createEvent(createEvent) },
                 onSuccess = { event ->
                     context?.toast("Event '${event.title}' created");

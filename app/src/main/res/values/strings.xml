@@ -40,6 +40,7 @@
     <string name="slider">Slider</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="logout">Logout</string>
     <string name="deleteEventConfirmationMsg">Are you sure to delete this event?</string>
     <string name="deleteThisEventQuestion">Delete this event?</string>
     <string name="detail_attendance_question">Do you attend this event?</string>
@@ -53,4 +54,12 @@
     <string name="wrong_login">Invalid password or user does not exist</string>
     <string name="duplicate_username">This username is already in use</string>
     <string name="duplicate_email">This email is already in use</string>
+    <string name="show_organized_events">Show organized events</string>
+    <string name="show_attributes">Show attributes</string>
+    <string name="signed_off_note">You\'ve been signed off</string>
+    <string name="edit_user_profile_title">Edit user profile</string>
+    <string name="no_signed_in_user">No signed in user</string>
+    <string name="user_profile_title">User profile</string>
+    <string name="edit_user_attributes">Edit attributes</string>
+    <string name="change_password">Change password</string>
 </resources>

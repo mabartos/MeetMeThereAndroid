@@ -72,18 +72,6 @@ class TestEventService : EventService {
         }
     }
 
-    override fun <T> callback(
-        supplier: () -> T,
-        onSuccess: (T) -> Unit,
-        onFailure: (Throwable) -> Unit
-    ) {
-        try {
-            onSuccess(supplier.invoke())
-        } catch (e: Exception) {
-            onFailure(e)
-        }
-    }
-
     private fun isInvalidIndex(id: Long): Boolean {
         return id < 0 || id >= events.size
     }
