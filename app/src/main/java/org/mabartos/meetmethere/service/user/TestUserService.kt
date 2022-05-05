@@ -27,6 +27,11 @@ class TestUserService : UserService {
             }
 
             val adminOrganizedEvents: Set<Long> = mutableSetOf(0, 1)
+            val adminAttributes: Map<String, String> =
+                mutableMapOf(
+                    Pair("phone", "+420 666 666 666"),
+                    Pair("mobile", "+420 999 999 999")
+                )
             add(
                 User(
                     id = Int.MAX_VALUE.toLong(),
@@ -36,7 +41,7 @@ class TestUserService : UserService {
                     firstName = "Admin",
                     lastName = "Admin",
                     organizedEvents = adminOrganizedEvents,
-                    attributes = HashMap()
+                    attributes = adminAttributes
                 )
             )
         }
@@ -98,6 +103,24 @@ class TestUserService : UserService {
             currentUser = findById(currentUser!!.id)
         }
         return currentUser
+    }
+
+    override fun addAttribute(userId: Long, key: String, value: String) {
+        val user = findById(userId)
+        if (user != null && !user.attributes.containsKey(key)) {
+            val newMap = user.attributes.toMutableMap()
+            newMap[key] = value
+            updateUser(User.Builder(user).attributes(newMap).build())
+        }
+    }
+
+    override fun removeAttribute(userId: Long, key: String) {
+        val user = findById(userId)
+        if (user != null && user.attributes.containsKey(key)) {
+            val newMap = user.attributes.toMutableMap()
+            newMap.remove(key)
+            updateUser(User.Builder(user).attributes(newMap).build())
+        }
     }
 
     private fun mapCreateUserToUser(id: Long, createUser: CreateUser): User {

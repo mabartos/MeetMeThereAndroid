@@ -53,10 +53,14 @@ class UserProfileFragment(
 
         binding.userProfileOrganizedButton.text =
             resources.getString(R.string.show_organized_events)
-        binding.userProfileAttributes.text = resources.getString(R.string.show_attributes)
+        binding.userProfileAttributesButton.text = resources.getString(R.string.show_attributes)
         binding.userProfileLogout.text = resources.getString(R.string.logout)
 
-        //TODO click handlers
+        binding.userProfileAttributesButton.setOnClickListener {
+            findNavController().navigate(
+                UserProfileFragmentDirections.actionUserProfileToUserAttributes(user)
+            )
+        }
 
         binding.userProfileOrganizedButton.setOnClickListener {
             findNavController().navigate(

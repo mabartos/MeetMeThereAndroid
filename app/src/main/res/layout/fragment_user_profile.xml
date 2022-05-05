@@ -103,7 +103,7 @@
         tools:text="Show organized events" />
 
     <Button
-        android:id="@+id/user_profile_attributes"
+        android:id="@+id/user_profile_attributes_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"

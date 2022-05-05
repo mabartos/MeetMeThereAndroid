@@ -23,4 +23,7 @@ interface UserService {
     fun logout()
 
     fun getCurrentUser(): User?
+
+    fun addAttribute(userId: Long, key: String, value: String);
+    fun removeAttribute(userId: Long, key: String)
 }

@@ -45,7 +45,9 @@
     <string name="delete">Delete</string>
     <string name="logout">Logout</string>
     <string name="deleteEventConfirmationMsg">Are you sure to delete this event?</string>
+    <string name="deleteAttributeConfirmationMsg">Are you sure to delete this attribute?</string>
     <string name="deleteThisEventQuestion">Delete this event?</string>
+    <string name="deleteThisAttributeQuestion">Delete this attribute?</string>
     <string name="detail_attendance_question">Do you attend this event?</string>
     <string name="list_selected_event_title">Currently selected event</string>
     <string name="logout_button">Logout Button</string>
@@ -70,4 +72,8 @@
     <string name="wrong_password">Wrong password</string>
     <string name="password_was_changed">Password was changed</string>
     <string name="password_was_not_changed">Cannot change password</string>
+    <string name="user_attributes_title">Attributes</string>
+    <string name="user_attributes_empty">No user attributes</string>
+    <string name="user_attribute_deleted">Attribute was deleted</string>
+    <string name="create_attribute_floating_button">Create attribute floating button</string>
 </resources>
