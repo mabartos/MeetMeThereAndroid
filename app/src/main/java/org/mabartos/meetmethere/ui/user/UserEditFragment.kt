@@ -52,6 +52,14 @@ class UserEditFragment(
         binding.userUpdateAttrButton.text = resources.getString(R.string.edit_user_attributes)
         binding.userUpdatePasswordButton.text = resources.getString(R.string.change_password)
 
+        binding.userUpdatePasswordButton.setOnClickListener {
+            findNavController().navigate(
+                UserEditFragmentDirections.actionUserProfileEditFragmentToUserChangePasswordFragment(
+                    user
+                )
+            )
+        }
+
         binding.userUpdateSaveButton.setOnClickListener {
             var isUpdated = false
             val builder = User.Builder(user)

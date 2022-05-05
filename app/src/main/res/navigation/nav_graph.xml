@@ -115,7 +115,12 @@
         android:id="@+id/userProfileEditFragment"
         android:name="org.mabartos.meetmethere.ui.user.UserEditFragment"
         android:label="UserProfileEditFragment"
-        tools:layout="@layout/fragment_user_edit" />
+        tools:layout="@layout/fragment_user_edit">
+
+        <action
+            android:id="@+id/action_userProfileEditFragment_to_userChangePasswordFragment"
+            app:destination="@id/userChangePasswordFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/userOrganizedEventsFragment"
@@ -130,6 +135,17 @@
         <action
             android:id="@+id/action_userOrganizedEventsFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userChangePasswordFragment"
+        android:name="org.mabartos.meetmethere.ui.user.ChangePasswordFragment"
+        android:label="UserChangePasswordFragment"
+        tools:layout="@layout/fragment_user_change_password">
+
+        <argument
+            android:name="user"
+            app:argType="org.mabartos.meetmethere.data.user.User" />
     </fragment>
 
 </navigation>

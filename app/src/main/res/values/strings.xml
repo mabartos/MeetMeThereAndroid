@@ -29,7 +29,10 @@
     <string name="firstname">First name</string>
     <string name="lastname">Last name</string>
     <string name="password">Password</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
     <string name="password_confirmation">Password confirmation</string>
+    <string name="new_password_confirmation">New Password confirmation</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
     <string name="settings">Settings</string>
@@ -64,4 +67,7 @@
     <string name="change_password">Change password</string>
     <string name="my_organized_events">My organized events</string>
     <string name="no_organized_events">No events yet 😔</string>
+    <string name="wrong_password">Wrong password</string>
+    <string name="password_was_changed">Password was changed</string>
+    <string name="password_was_not_changed">Cannot change password</string>
 </resources>
