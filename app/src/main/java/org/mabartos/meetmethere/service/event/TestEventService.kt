@@ -27,8 +27,8 @@ class TestEventService : EventService {
                     startTime = LocalDateTime.of(2020, 8, 22, 2 + it, 0, 0),
                     endTime = LocalDateTime.of(2020, 8, 22, 3 + it, 0, 0),
                     response = EventResponseEnum.NOT_ANSWERED.textForm,
-                    longitude = ThreadLocalRandom.current().nextDouble(16.38, 16.58),
-                    latitude = ThreadLocalRandom.current().nextDouble(48.90, 49.20)
+                    longitude = ThreadLocalRandom.current().nextDouble(16.53, 16.58),
+                    latitude = ThreadLocalRandom.current().nextDouble(49.15, 49.20)
                 )
                 add(item)
             }

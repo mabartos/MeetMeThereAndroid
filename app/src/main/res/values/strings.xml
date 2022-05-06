@@ -51,6 +51,8 @@
     <string name="detail_attendance_question">Do you attend this event?</string>
     <string name="list_selected_event_title">Currently selected event</string>
     <string name="logout_button">Logout Button</string>
+    <string name="missing_key">You need to specify key</string>
+    <string name="missing_value">You need to specify value</string>
     <string name="missing_username">You need to specify username</string>
     <string name="missing_email">You need to specify email</string>
     <string name="missing_password">You need to specify password</string>
@@ -75,5 +77,11 @@
     <string name="user_attributes_title">Attributes</string>
     <string name="user_attributes_empty">No user attributes</string>
     <string name="user_attribute_deleted">Attribute was deleted</string>
+    <string name="user_attribute_create">Create attribute</string>
+    <string name="user_attribute_created">Attribute created</string>
+    <string name="user_attribute_duplicate">Attribute already exists</string>
     <string name="create_attribute_floating_button">Create attribute floating button</string>
+    <string name="key">Key</string>
+    <string name="value">Value</string>
+    <string name="create">Create</string>
 </resources>

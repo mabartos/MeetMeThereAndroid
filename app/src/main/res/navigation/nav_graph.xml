@@ -157,9 +157,16 @@
         android:label="UserAttributesFragment"
         tools:layout="@layout/fragment_user_attributes">
 
-        <argument
-            android:name="user"
-            app:argType="org.mabartos.meetmethere.data.user.User" />
+        <action
+            android:id="@+id/action_userAttributes_to_createAttribute"
+            app:destination="@id/userAttributeCreateFragment" />
+
     </fragment>
+
+    <fragment
+        android:id="@+id/userAttributeCreateFragment"
+        android:name="org.mabartos.meetmethere.ui.user.attributes.UserAttributeCreateFragment"
+        android:label="UserAtributeCreateFragment"
+        tools:layout="@layout/fragment_user_attribute_create" />
 
 </navigation>

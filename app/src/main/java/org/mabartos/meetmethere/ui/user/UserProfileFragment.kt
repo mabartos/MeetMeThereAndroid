@@ -58,7 +58,7 @@ class UserProfileFragment(
 
         binding.userProfileAttributesButton.setOnClickListener {
             findNavController().navigate(
-                UserProfileFragmentDirections.actionUserProfileToUserAttributes(user)
+                UserProfileFragmentDirections.actionUserProfileToUserAttributes()
             )
         }
 

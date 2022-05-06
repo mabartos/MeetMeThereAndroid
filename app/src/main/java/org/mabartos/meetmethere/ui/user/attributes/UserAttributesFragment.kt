@@ -37,7 +37,9 @@ class UserAttributesFragment(
         }
         binding.userAttributesToolbar.title = resources.getString(R.string.user_attributes_title)
 
-        binding.createAttributeFloatingButton.setOnClickListener { }
+        binding.createAttributeFloatingButton.setOnClickListener {
+            findNavController().navigate(UserAttributesFragmentDirections.actionUserAttributesToCreateAttribute())
+        }
 
         val user = userService.getCurrentUser() ?: return
 
