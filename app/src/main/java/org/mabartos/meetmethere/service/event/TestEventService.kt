@@ -157,7 +157,10 @@ class TestEventService : EventService {
                     val index = events.indexOf(event)
                     if (index != -1) {
                         events[index] =
-                            mapEventToEventItem(id, Event.Builder(event.toEvent()).build())
+                            mapEventToEventItem(
+                                id,
+                                Event.Builder(event.toEvent()).response(state.textForm).build()
+                            )
                         onSuccess.invoke()
                     }
                 }

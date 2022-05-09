@@ -47,6 +47,45 @@ class EventDetailFragment(
         }
 
         val event = EventDetailFragmentArgs.fromBundle(requireArguments()).event
+
+        binding.eventDetailDelete.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.deleteThisEventQuestion)
+                .setMessage(R.string.deleteEventConfirmationMsg)
+                .setNeutralButton(resources.getString(R.string.cancel)) { _, _ ->
+                }
+                .setPositiveButton(
+                    resources.getString(R.string.confirm).uppercase()
+                ) { _, _ ->
+                    findNavController().navigate(EventDetailFragmentDirections.actionDetailToListFragment())
+                    eventService.removeEvent(event.id, onSuccess = {
+                        context?.toast("Event was deleted")
+                    }, onFailure = { e ->
+                        context?.toast("Cannot delete event")
+                        Log.e(
+                            EventDetailFragment::getTag.toString(),
+                            "Cannot delete event", e
+                        )
+                    })
+                }
+                .show()
+        }
+
+        binding.eventDetailAcceptButton.setOnClickListener {
+            changeAttendanceButtonsColors(binding.eventDetailAcceptButton)
+            currentResponse = checkCurrentResponse(event.id, EventResponseEnum.ACCEPT)
+        }
+
+        binding.eventDetailMaybeButton.setOnClickListener {
+            changeAttendanceButtonsColors(binding.eventDetailMaybeButton)
+            currentResponse = checkCurrentResponse(event.id, EventResponseEnum.MAYBE)
+        }
+
+        binding.eventDetailDeclineButton.setOnClickListener {
+            changeAttendanceButtonsColors(binding.eventDetailDeclineButton)
+            currentResponse = checkCurrentResponse(event.id, EventResponseEnum.DECLINE)
+        }
+
         initData(event)
 
         eventService.getEvent(event.id,
@@ -54,7 +93,7 @@ class EventDetailFragment(
                 initData(item)
             }, onFailure = { e ->
                 context?.toast("Event doesn't exist")
-                Log.e(EventDetailFragment::getTag.toString(), e.message ?: e.toString())
+                Log.e(tag.toString(), e.message ?: e.toString())
             })
     }
 
@@ -162,37 +201,6 @@ class EventDetailFragment(
 
         binding.eventDetailDescription.text = item.description
 
-        binding.eventDetailEdit.setOnClickListener {
-            findNavController().navigate(
-                EventDetailFragmentDirections.actionDetailToUpdateEvent(
-                    item
-                )
-            )
-        }
-
-        binding.eventDetailDelete.setOnClickListener {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.deleteThisEventQuestion)
-                .setMessage(R.string.deleteEventConfirmationMsg)
-                .setNeutralButton(resources.getString(R.string.cancel)) { _, _ ->
-                }
-                .setPositiveButton(
-                    resources.getString(R.string.confirm).uppercase()
-                ) { _, _ ->
-                    findNavController().navigate(EventDetailFragmentDirections.actionDetailToListFragment())
-                    eventService.removeEvent(item.id, onSuccess = {
-                        context?.toast("Event was deleted")
-                    }, onFailure = { e ->
-                        context?.toast("Cannot delete event")
-                        Log.e(
-                            EventDetailFragment::getTag.toString(),
-                            "Cannot delete event", e
-                        )
-                    })
-                }
-                .show()
-        }
-
         val response = EventResponseEnum.getByTextForm(item.response)
         this.currentResponse = response
 
@@ -212,21 +220,6 @@ class EventDetailFragment(
             else -> {
                 context?.toast("Unknown response type!")
             }
-        }
-
-        binding.eventDetailAcceptButton.setOnClickListener {
-            changeAttendanceButtonsColors(binding.eventDetailAcceptButton)
-            currentResponse = checkCurrentResponse(item.id, EventResponseEnum.ACCEPT)
-        }
-
-        binding.eventDetailMaybeButton.setOnClickListener {
-            changeAttendanceButtonsColors(binding.eventDetailMaybeButton)
-            currentResponse = checkCurrentResponse(item.id, EventResponseEnum.MAYBE)
-        }
-
-        binding.eventDetailDeclineButton.setOnClickListener {
-            changeAttendanceButtonsColors(binding.eventDetailDeclineButton)
-            currentResponse = checkCurrentResponse(item.id, EventResponseEnum.DECLINE)
         }
     }
 }
