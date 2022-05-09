@@ -182,6 +182,14 @@ class EventDetailFragment(
         binding.eventDetailTitle.text = item.title
         binding.eventDetailVenue.text = item.venue
 
+        binding.eventDetailEdit.setOnClickListener {
+            findNavController().navigate(
+                EventDetailFragmentDirections.actionDetailToUpdateEvent(
+                    item
+                )
+            )
+        }
+
         if (item.imageUrl.isNotBlank()) {
             ImageLoader.getInstance().displayImage(item.imageUrl, binding.eventDetailImage)
         } else {

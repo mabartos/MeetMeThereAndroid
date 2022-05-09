@@ -7,6 +7,7 @@ import org.mabartos.meetmethere.service.ServiceUtil
 import org.mabartos.meetmethere.service.user.UserService.Companion.EMAIL_FIELD
 import org.mabartos.meetmethere.service.user.UserService.Companion.USERNAME_FIELD
 import java.util.*
+import kotlin.collections.HashMap
 
 class TestUserService : UserService {
 
@@ -241,6 +242,14 @@ class TestUserService : UserService {
         onSuccess: () -> Unit,
         onFailure: (Throwable) -> Unit
     ) {
-        TODO("Not yet implemented")
+        findById(userId,
+            onSuccess = { user ->
+                updateUser(
+                    User.Builder(user).attributes(HashMap()).build(),
+                    onSuccess = { onSuccess.invoke() },
+                    onFailure = { e -> onFailure.invoke(e) }
+                )
+            },
+            onFailure = { onFailure.invoke(it) })
     }
 }

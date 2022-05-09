@@ -14,17 +14,17 @@ import org.mabartos.meetmethere.databinding.FragmentEventCreateBinding
 import org.mabartos.meetmethere.service.event.EventService
 import org.mabartos.meetmethere.service.event.EventServiceUtil
 import org.mabartos.meetmethere.util.*
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.util.*
 
 class CreateEventFragment(
     private val eventService: EventService = EventServiceUtil.createService()
 ) : Fragment() {
 
     private lateinit var binding: FragmentEventCreateBinding
-    private var startDate: Calendar? = null
-    private var endDate: Calendar? = null
+    private var startDate: LocalDate? = null
+    private var endDate: LocalDate? = null
     private var startTime: LocalTime? = null
     private var endTime: LocalTime? = null
 
@@ -49,9 +49,9 @@ class CreateEventFragment(
             context?.datePicker(
                 parentFragmentManager,
                 title = R.string.start_day_settings.toString(),
-                onPositiveClick = { calendar ->
-                    startDate = calendar
-                    binding.eventCreateStartDay.hint = context?.formatDate("dd.MM", calendar.time)
+                onPositiveClick = { date ->
+                    startDate = date
+                    binding.eventCreateStartDay.hint = context?.formatDate("dd.MM", date)
                 }
             )
         }
@@ -70,9 +70,9 @@ class CreateEventFragment(
             context?.datePicker(
                 parentFragmentManager,
                 title = R.string.end_day_settings.toString(),
-                onPositiveClick = { calendar ->
-                    endDate = calendar
-                    binding.eventCreateEndDay.hint = context?.formatDate("dd.MM", calendar.time)
+                onPositiveClick = { date ->
+                    endDate = date
+                    binding.eventCreateEndDay.hint = context?.formatDate("dd.MM", date)
                 }
             )
         }
@@ -102,24 +102,24 @@ class CreateEventFragment(
                 Event(
                     title = titleText,
                     venue = venueText,
-                    imageUrl = "\\TODO",
+                    imageUrl = "",//TODO
                     description = descriptionText,
                     startTime = LocalDateTime.of(
-                        startDate!!.get(Calendar.YEAR),
-                        startDate!!.get(Calendar.MONTH),
-                        startDate!!.get(Calendar.DAY_OF_MONTH),
+                        startDate!!.year,
+                        startDate!!.month,
+                        startDate!!.dayOfMonth,
                         startTime!!.hour,
                         startTime!!.minute
                     ),
                     endTime = LocalDateTime.of(
-                        endDate!!.get(Calendar.YEAR),
-                        endDate!!.get(Calendar.MONTH),
-                        endDate!!.get(Calendar.DAY_OF_MONTH),
+                        endDate!!.year,
+                        endDate!!.month,
+                        endDate!!.dayOfMonth,
                         endTime!!.hour,
                         endTime!!.minute
                     ),
                     isPublic = true, //TODO
-                    longitude = 20.0,
+                    longitude = 20.0, //TODO
                     latitude = 20.0,
                     response = EventResponseEnum.ACCEPT.textForm
                 )

@@ -13,18 +13,27 @@ import org.mabartos.meetmethere.databinding.FragmentEventUpdateBinding
 import org.mabartos.meetmethere.service.event.EventService
 import org.mabartos.meetmethere.service.event.EventServiceUtil
 import org.mabartos.meetmethere.util.*
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
-import java.util.*
 
 class UpdateEventFragment(
     private val eventService: EventService = EventServiceUtil.createService()
 ) : Fragment() {
 
     private lateinit var binding: FragmentEventUpdateBinding
-    private var startDate: Calendar? = null
-    private var endDate: Calendar? = null
+
+    private var startDate: LocalDate? = null
+    private lateinit var startDateOriginal: LocalDate
+
+    private var endDate: LocalDate? = null
+    private lateinit var endDateOriginal: LocalDate
+
     private var startTime: LocalTime? = null
+    private lateinit var startTimeOriginal: LocalTime
+
     private var endTime: LocalTime? = null
+    private lateinit var endTimeOriginal: LocalTime
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,6 +57,12 @@ class UpdateEventFragment(
         binding.eventUpdateVenueInput.setText(event.venue)
         binding.eventUpdateDescriptionInput.setText(event.description)
 
+        startDateOriginal = event.startTime.toLocalDate()
+        startTimeOriginal = event.startTime.toLocalTime()
+
+        endDateOriginal = event.endTime.toLocalDate()
+        endTimeOriginal = event.endTime.toLocalTime()
+
         binding.eventUpdateStartDay.hint = context?.formatDate("dd.MM", event.startTime)
         binding.eventUpdateStartTime.hint = context?.formatTime(event.startTime.toLocalTime())
         binding.eventUpdateEndDay.hint = context?.formatDate("dd.MM", event.endTime)
@@ -57,10 +72,10 @@ class UpdateEventFragment(
             context?.datePicker(
                 parentFragmentManager,
                 title = R.string.start_day_settings.toString(),
-                onPositiveClick = { calendar ->
-                    startDate = calendar
+                onPositiveClick = { date ->
+                    startDate = date
                     binding.eventUpdateStartDay.hint =
-                        context?.formatDate("dd.MM", calendar.time)
+                        context?.formatDate("dd.MM", date)
                 }
             )
         }
@@ -79,10 +94,10 @@ class UpdateEventFragment(
             context?.datePicker(
                 parentFragmentManager,
                 title = R.string.end_day_settings.toString(),
-                onPositiveClick = { calendar ->
-                    endDate = calendar
+                onPositiveClick = { date ->
+                    endDate = date
                     binding.eventUpdateEndDay.hint =
-                        context?.formatDate("dd.MM", calendar.time)
+                        context?.formatDate("dd.MM", date)
                 }
             )
         }
@@ -119,7 +134,30 @@ class UpdateEventFragment(
                 builder.description(descriptionText)
             }
 
-            //TODO DATE
+            if (startDate != null && startDate != startDateOriginal) {
+                isUpdated = true
+                val finalDate = LocalDateTime.of(startDate, startTime ?: startTimeOriginal)
+                builder.startTime(finalDate)
+            }
+
+            if (startTime != null && startTime != startTimeOriginal) {
+                isUpdated = true
+                val finalDate = LocalDateTime.of(startDate ?: startDateOriginal, startTime)
+                builder.startTime(finalDate)
+            }
+
+            if (endDate != null && endDate != endDateOriginal) {
+                isUpdated = true
+                val finalDate = LocalDateTime.of(endDate, endTime ?: endTimeOriginal)
+                builder.endTime(finalDate)
+            }
+
+            if (endTime != null && endTime != endTimeOriginal) {
+                isUpdated = true
+                val finalDate = LocalDateTime.of(endDate ?: endDateOriginal, endTime)
+                builder.endTime(finalDate)
+            }
+
             if (isUpdated) {
                 eventService.updateEvent(event.id, builder.build(), onSuccess = {
                     context?.toast("Event updated");

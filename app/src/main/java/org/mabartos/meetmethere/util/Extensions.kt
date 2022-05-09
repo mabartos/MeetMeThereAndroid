@@ -9,6 +9,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -23,7 +24,7 @@ fun Context.datePicker(
     fragmentManager: FragmentManager,
     title: String = "Set date",
     startSelection: Long = MaterialDatePicker.todayInUtcMilliseconds(),
-    onPositiveClick: Consumer<Calendar>
+    onPositiveClick: Consumer<LocalDate>
 ) {
     val picker = MaterialDatePicker.Builder.datePicker()
         .setTitleText(title)
@@ -33,8 +34,10 @@ fun Context.datePicker(
     picker.addOnPositiveButtonClickListener { selection ->
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = selection
-
-        onPositiveClick.accept(calendar)
+        val localDate: LocalDate =
+            LocalDateTime.ofInstant(calendar.toInstant(), calendar.timeZone.toZoneId())
+                .toLocalDate();
+        onPositiveClick.accept(localDate)
     }
 
     picker.show(fragmentManager, picker.tag)
@@ -64,7 +67,11 @@ fun Context.timePicker(
     }
 }
 
-fun Context.formatDate(pattern: String, date: Date, locale: Locale = Locale.getDefault()): String {
+fun Context.formatDate(
+    pattern: String,
+    date: LocalDate,
+    locale: Locale = Locale.getDefault()
+): String {
     return try {
         val outputDateFormat = SimpleDateFormat(pattern, locale)
         outputDateFormat.format(date)
