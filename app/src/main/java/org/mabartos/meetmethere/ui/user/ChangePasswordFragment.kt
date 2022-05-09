@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.user.User
 import org.mabartos.meetmethere.databinding.FragmentUserChangePasswordBinding
-import org.mabartos.meetmethere.service.ServiceUtil
 import org.mabartos.meetmethere.service.user.UserService
 import org.mabartos.meetmethere.service.user.UserServiceUtil
 import org.mabartos.meetmethere.util.InputUtils
@@ -79,20 +78,15 @@ class ChangePasswordFragment(
                 binding.userChangePwdNewConfirm.error = ""
             }
 
-            ServiceUtil.callback(
-                supplier = {
-                    userService.updateUser(
-                        User.Builder(user).password(newPwd.toString()).build()
-                    )
-                },
+            userService.updateUser(
+                user = User.Builder(user).password(newPwd.toString()).build(),
                 onSuccess = {
                     context?.toast(resources.getString(R.string.password_was_changed))
                     findNavController().navigateUp()
                 },
-                onFailure = { e ->
-                    context?.toast(resources.getString(R.string.password) + ". ${e.message}")
-                }
-            )
+                onFailure = {
+                    context?.toast(resources.getString(R.string.password) + ". ${it.message}")
+                })
         }
     }
 }

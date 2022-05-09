@@ -1,6 +1,7 @@
 package org.mabartos.meetmethere.ui.login
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,30 +80,30 @@ class UserRegisterFragment(
                 binding.userRegisterPasswordConfirm.error = ""
             }
 
-            try {
-                val isSuccessful = userService.register(
-                    CreateUser(
-                        username = username.toString(),
-                        email = email.toString(),
-                        firstName = firstName.toString(),
-                        lastName = lastName.toString(),
-                        password = password.toString(),
-                        attributes = HashMap()
-                    )
-                )
-
-                if (isSuccessful) findNavController().navigate(UserRegisterFragmentDirections.actionRegisterToHome())
-
-            } catch (e: ModelDuplicateException) {
-                if (e.getField() == "username") {
-                    binding.userRegisterUsername.error =
-                        resources.getString(R.string.duplicate_username)
-                } else if (e.getField() == "email") {
-                    binding.userRegisterEmail.error =
-                        resources.getString(R.string.duplicate_email)
+            userService.register(
+                CreateUser(
+                    username = username.toString(),
+                    email = email.toString(),
+                    firstName = firstName.toString(),
+                    lastName = lastName.toString(),
+                    password = password.toString(),
+                    attributes = HashMap()
+                ),
+                onSuccess = { findNavController().navigate(UserRegisterFragmentDirections.actionRegisterToHome()) },
+                onFailure = { e ->
+                    if (e is ModelDuplicateException) {
+                        if (e.getField() == UserService.USERNAME_FIELD) {
+                            binding.userRegisterUsername.error =
+                                resources.getString(R.string.duplicate_username)
+                        } else if (e.getField() == UserService.EMAIL_FIELD) {
+                            binding.userRegisterEmail.error =
+                                resources.getString(R.string.duplicate_email)
+                        }
+                    } else {
+                        Log.e(tag.toString(), "Cannot register", e)
+                    }
                 }
-                return@setOnClickListener
-            }
+            )
         }
     }
 }

@@ -5,25 +5,47 @@ import org.mabartos.meetmethere.data.user.User
 
 interface UserService {
 
-    fun findById(id: Long): User?
+    companion object {
+        val USERNAME_FIELD: String = "username"
+        val EMAIL_FIELD: String = "email"
+    }
 
-    fun findByUsername(username: String): User?
+    fun findById(id: Long, onSuccess: (User) -> Unit, onFailure: (Throwable) -> Unit)
 
-    fun findByEmail(email: String): User?
+    fun findByUsername(username: String, onSuccess: (User) -> Unit, onFailure: (Throwable) -> Unit)
 
-    fun login(username: String, password: String): Boolean
+    fun findByEmail(email: String, onSuccess: (User) -> Unit, onFailure: (Throwable) -> Unit)
+
+    fun login(
+        username: String,
+        password: String,
+        onSuccess: (Boolean) -> Unit,
+        onFailure: (Throwable) -> Unit
+    )
 
     @Throws(ModelDuplicateException::class)
-    fun register(user: CreateUser): Boolean
+    fun register(user: CreateUser, onSuccess: (Boolean) -> Unit, onFailure: (Throwable) -> Unit)
 
-    fun getInfo(): User?
+    fun getInfo(onSuccess: (User?) -> Unit, onFailure: (Throwable) -> Unit)
 
-    fun updateUser(user: User)
+    fun updateUser(user: User, onSuccess: () -> Unit, onFailure: (Throwable) -> Unit)
 
-    fun logout()
+    fun logout(onSuccess: () -> Unit, onFailure: (Throwable) -> Unit)
 
-    fun getCurrentUser(): User?
+    fun getCurrentUser(onSuccess: (User) -> Unit, onFailure: (Throwable) -> Unit)
 
-    fun addAttribute(userId: Long, key: String, value: String);
-    fun removeAttribute(userId: Long, key: String)
+    fun addAttribute(
+        userId: Long,
+        key: String,
+        value: String,
+        onSuccess: () -> Unit,
+        onFailure: (Throwable) -> Unit
+    )
+
+    fun removeAttribute(
+        userId: Long,
+        key: String,
+        onSuccess: () -> Unit,
+        onFailure: (Throwable) -> Unit
+    )
 }

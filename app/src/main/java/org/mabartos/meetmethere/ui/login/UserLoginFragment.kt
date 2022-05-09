@@ -1,6 +1,7 @@
 package org.mabartos.meetmethere.ui.login
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,11 +49,17 @@ class UserLoginFragment(
             )
             if (errorPassword) return@setOnClickListener
 
-            if (userService.login(username = username.toString(), password = password.toString())) {
-                findNavController().navigate(UserLoginFragmentDirections.actionLoginToEventList())
-            } else {
-                context?.toast("Invalid password or user doesn't exist")
-            }
+            userService.login(
+                username = username.toString(),
+                password = password.toString(),
+                onSuccess = { findNavController().navigate(UserLoginFragmentDirections.actionLoginToEventList()) },
+                onFailure = { e ->
+                    if (e is IllegalArgumentException && e.message != null && e.message!!.contains("Invalid")) {
+                        context?.toast("Invalid password or user doesn't exist")
+                    } else {
+                        Log.e(tag.toString(), "Cannot login", e)
+                    }
+                })
         }
 
         binding.userLoginRegisterButton.setOnClickListener {

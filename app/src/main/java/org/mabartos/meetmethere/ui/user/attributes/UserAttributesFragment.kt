@@ -41,47 +41,59 @@ class UserAttributesFragment(
             findNavController().navigate(UserAttributesFragmentDirections.actionUserAttributesToCreateAttribute())
         }
 
-        val user = userService.getCurrentUser() ?: return
+        userService.getCurrentUser(
+            onSuccess = { user ->
+                if (user.attributes.isEmpty()) {
+                    binding.userAttributesList.visibility = View.GONE
+                    binding.userAttributesEmpty.visibility = View.VISIBLE
+                    binding.userAttributesEmpty.text =
+                        resources.getText(R.string.user_attributes_empty)
+                } else {
+                    binding.userAttributesList.visibility = View.VISIBLE
+                    binding.userAttributesEmpty.visibility = View.GONE
 
-        if (user.attributes.isEmpty()) {
-            binding.userAttributesList.visibility = View.GONE
-            binding.userAttributesEmpty.visibility = View.VISIBLE
-            binding.userAttributesEmpty.text = resources.getText(R.string.user_attributes_empty)
-        } else {
-            binding.userAttributesList.visibility = View.VISIBLE
-            binding.userAttributesEmpty.visibility = View.GONE
+                    val adapter = UserAttributeListAdapter(
+                        onItemClick = {},
+                        onDeleteClick = { item ->
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle(R.string.deleteThisAttributeQuestion)
+                                .setMessage(R.string.deleteAttributeConfirmationMsg)
+                                .setNeutralButton(resources.getString(R.string.cancel)) { _, _ ->
+                                }
+                                .setPositiveButton(
+                                    resources.getString(R.string.confirm).uppercase()
+                                ) { _, _ ->
+                                    userService.removeAttribute(
+                                        user.id,
+                                        item.key,
+                                        onSuccess = {
+                                            context?.toast(resources.getString(R.string.user_attribute_deleted))
+                                            onViewCreated(view, savedInstanceState)
+                                        },
+                                        onFailure = {
+                                            context?.toast(resources.getString(R.string.user_attribute_cannot_delete))
+                                        })
+                                }
+                                .show()
+                        }
+                    )
 
-            val adapter = UserAttributeListAdapter(
-                onItemClick = {},
-                onDeleteClick = { item ->
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.deleteThisAttributeQuestion)
-                        .setMessage(R.string.deleteAttributeConfirmationMsg)
-                        .setNeutralButton(resources.getString(R.string.cancel)) { _, _ ->
-                        }
-                        .setPositiveButton(
-                            resources.getString(R.string.confirm).uppercase()
-                        ) { _, _ ->
-                            userService.removeAttribute(user.id, item.key)
-                            context?.toast(resources.getString(R.string.user_attribute_deleted))
-                            onViewCreated(view, savedInstanceState)
-                        }
-                        .show()
+                    binding.userAttributesList.layoutManager = LinearLayoutManager(requireContext())
+                    binding.userAttributesList.adapter = adapter
+
+                    val attributes: List<UserAttributeItem> =
+                        user.attributes
+                            .entries
+                            .stream()
+                            .filter { f -> Objects.nonNull(f) }
+                            .map { f -> UserAttributeItem(f.key, f.value) }
+                            .collect(Collectors.toList())
+
+                    adapter.submitList(attributes)
                 }
-            )
-
-            binding.userAttributesList.layoutManager = LinearLayoutManager(requireContext())
-            binding.userAttributesList.adapter = adapter
-
-            val attributes: List<UserAttributeItem> =
-                user.attributes
-                    .entries
-                    .stream()
-                    .filter { f -> Objects.nonNull(f) }
-                    .map { f -> UserAttributeItem(f.key, f.value) }
-                    .collect(Collectors.toList())
-
-            adapter.submitList(attributes)
-        }
+            }, onFailure = {
+                context?.toast(resources.getString(R.string.user_attribute_cannot_get))
+                findNavController().navigateUp()
+            })
     }
 }

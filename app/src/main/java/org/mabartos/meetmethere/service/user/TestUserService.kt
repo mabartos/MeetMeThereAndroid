@@ -2,6 +2,10 @@ package org.mabartos.meetmethere.service.user
 
 import org.mabartos.meetmethere.data.user.CreateUser
 import org.mabartos.meetmethere.data.user.User
+import org.mabartos.meetmethere.service.ModelNotFoundException
+import org.mabartos.meetmethere.service.ServiceUtil
+import org.mabartos.meetmethere.service.user.UserService.Companion.EMAIL_FIELD
+import org.mabartos.meetmethere.service.user.UserService.Companion.USERNAME_FIELD
 import java.util.*
 
 class TestUserService : UserService {
@@ -46,83 +50,6 @@ class TestUserService : UserService {
             )
         }
 
-    override fun findByUsername(username: String): User? =
-        users.find { u -> u.username == username }
-
-    override fun findById(id: Long): User? = users.find { u -> u.id == id }
-    override fun findByEmail(email: String): User? = users.find { u -> u.email == email }
-
-    override fun login(username: String, password: String): Boolean {
-        val user = findByUsername(username)
-        if (user != null && user.password == password) {
-            this.token = UUID.randomUUID().toString()
-            this.currentUser = user
-            return true
-        }
-        return false
-    }
-
-    @Throws(ModelDuplicateException::class)
-    override fun register(user: CreateUser): Boolean {
-        if (findByUsername(user.username) != null) {
-            throw ModelDuplicateException("This username is already in use", "username")
-        }
-
-        if (findByEmail(user.email) != null) {
-            throw ModelDuplicateException("This email is already in use", "email")
-        }
-
-        val converted: User = mapCreateUserToUser(user.hashCode().toLong(), user)
-        this.currentUser = converted
-        users.add(converted)
-        return true
-    }
-
-    override fun getInfo(): User? {
-        return if (currentUser != null) currentUser else null
-    }
-
-    override fun updateUser(user: User) {
-        val found = findById(user.id)
-        if (found != null) {
-            val index = users.indexOf(found)
-            if (index != -1) {
-                users[index] = user
-                return
-            }
-        }
-    }
-
-    override fun logout() {
-        this.token = null
-        this.currentUser = null
-    }
-
-    override fun getCurrentUser(): User? {
-        if (currentUser != null) {
-            currentUser = findById(currentUser!!.id)
-        }
-        return currentUser
-    }
-
-    override fun addAttribute(userId: Long, key: String, value: String) {
-        val user = findById(userId)
-        if (user != null && !user.attributes.containsKey(key)) {
-            val newMap = user.attributes.toMutableMap()
-            newMap[key] = value
-            updateUser(User.Builder(user).attributes(newMap).build())
-        }
-    }
-
-    override fun removeAttribute(userId: Long, key: String) {
-        val user = findById(userId)
-        if (user != null && user.attributes.containsKey(key)) {
-            val newMap = user.attributes.toMutableMap()
-            newMap.remove(key)
-            updateUser(User.Builder(user).attributes(newMap).build())
-        }
-    }
-
     private fun mapCreateUserToUser(id: Long, createUser: CreateUser): User {
         return User(
             id = id,
@@ -134,5 +61,180 @@ class TestUserService : UserService {
             organizedEvents = HashSet(),
             attributes = HashMap()
         )
+    }
+
+    override fun findById(id: Long, onSuccess: (User) -> Unit, onFailure: (Throwable) -> Unit) {
+        ServiceUtil.callback(
+            supplier = {
+                users.find { u -> u.id == id } ?: throw ModelDuplicateException()
+            }, onSuccess = {
+                onSuccess.invoke(it)
+            }, onFailure = {
+                onFailure.invoke(it)
+            })
+    }
+
+    override fun findByUsername(
+        username: String,
+        onSuccess: (User) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        ServiceUtil.callback(
+            supplier = {
+                users.find { u -> u.username == username } ?: throw ModelDuplicateException()
+            }, onSuccess = {
+                onSuccess.invoke(it)
+            }, onFailure = {
+                onFailure.invoke(it)
+            })
+    }
+
+    override fun findByEmail(
+        email: String,
+        onSuccess: (User) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        ServiceUtil.callback(
+            supplier = {
+                users.find { u -> u.email == email } ?: throw ModelDuplicateException()
+            }, onSuccess = {
+                onSuccess.invoke(it)
+            }, onFailure = {
+                onFailure.invoke(it)
+            })
+    }
+
+    override fun login(
+        username: String,
+        password: String,
+        onSuccess: (Boolean) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        findByUsername(username,
+            onSuccess = { user ->
+                if (user.password == password) {
+                    this.token = UUID.randomUUID().toString()
+                    this.currentUser = user
+                } else {
+                    throw IllegalArgumentException("Invalid password")
+                }
+            }, onFailure = {
+                onFailure.invoke(it)
+            })
+    }
+
+    override fun register(
+        user: CreateUser,
+        onSuccess: (Boolean) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        findByUsername(user.username,
+            onSuccess = {
+                throw ModelDuplicateException(
+                    "This username is already in use",
+                    USERNAME_FIELD
+                )
+            },
+            onFailure = {})
+
+        findByEmail(user.email,
+            onSuccess = {
+                throw ModelDuplicateException(
+                    "This email is already in use",
+                    EMAIL_FIELD
+                )
+            },
+            onFailure = {})
+
+        val converted: User = mapCreateUserToUser(user.hashCode().toLong(), user)
+        this.currentUser = converted
+        users.add(converted)
+    }
+
+
+    override fun getInfo(onSuccess: (User?) -> Unit, onFailure: (Throwable) -> Unit) {
+        onSuccess.invoke(currentUser)
+    }
+
+    override fun updateUser(user: User, onSuccess: () -> Unit, onFailure: (Throwable) -> Unit) {
+        findById(user.id,
+            onSuccess = {
+                val index = users.indexOf(it)
+                if (index != -1) {
+                    users[index] = user
+                } else {
+                    throw ModelNotFoundException()
+                }
+            }, onFailure = {
+                onFailure.invoke(it)
+            })
+    }
+
+    override fun logout(onSuccess: () -> Unit, onFailure: (Throwable) -> Unit) {
+        this.token = null
+        this.currentUser = null
+        onSuccess.invoke()
+    }
+
+    override fun getCurrentUser(onSuccess: (User) -> Unit, onFailure: (Throwable) -> Unit) {
+        ServiceUtil.callback(
+            supplier = {
+                if (currentUser != null) {
+                    findById(
+                        id = currentUser!!.id,
+                        onSuccess = {
+                            currentUser = it
+                        }, onFailure = {
+                            onFailure.invoke(it)
+                        })
+                }
+            }, onSuccess = {
+                onSuccess.invoke(currentUser!!)
+            }, onFailure = {
+                onFailure.invoke(it)
+            })
+    }
+
+    override fun addAttribute(
+        userId: Long,
+        key: String,
+        value: String,
+        onSuccess: () -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        findById(userId,
+            onSuccess = { user ->
+                if (!user.attributes.containsKey(key)) {
+                    val newMap = user.attributes.toMutableMap()
+                    newMap[key] = value
+                    updateUser(
+                        User.Builder(user).attributes(newMap).build(),
+                        onSuccess = { onSuccess.invoke() },
+                        onFailure = { e -> onFailure.invoke(e) }
+                    )
+                }
+            },
+            onFailure = { onFailure.invoke(it) })
+    }
+
+    override fun removeAttribute(
+        userId: Long,
+        key: String,
+        onSuccess: () -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        findById(userId,
+            onSuccess = { user ->
+                if (user.attributes.containsKey(key)) {
+                    val newMap = user.attributes.toMutableMap()
+                    newMap.remove(key)
+                    updateUser(
+                        User.Builder(user).attributes(newMap).build(),
+                        onSuccess = { onSuccess.invoke() },
+                        onFailure = { e -> onFailure.invoke(e) }
+                    )
+                }
+            },
+            onFailure = { onFailure.invoke(it) })
     }
 }

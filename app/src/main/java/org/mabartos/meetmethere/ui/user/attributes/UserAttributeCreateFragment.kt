@@ -37,39 +37,47 @@ class UserAttributeCreateFragment(
 
         binding.userAttributeAddCreateButton.text = resources.getString(R.string.create)
 
-        val user = userService.getCurrentUser()
-        if (user == null) {
-            context?.toast("Cannot find current user")
-            return
-        }
+        userService.getCurrentUser(
+            onSuccess = { user ->
+                binding.userAttributeAddCreateButton.setOnClickListener {
+                    val key = binding.userAttributeAddKeyInput.text
+                    val keyError = InputUtils.errorOnBlankField(
+                        key,
+                        binding.userAttributeAddKey,
+                        resources.getString(R.string.missing_key)
+                    )
+                    if (keyError) return@setOnClickListener
 
-        binding.userAttributeAddCreateButton.setOnClickListener {
-            val key = binding.userAttributeAddKeyInput.text
-            val keyError = InputUtils.errorOnBlankField(
-                key,
-                binding.userAttributeAddKey,
-                resources.getString(R.string.missing_key)
-            )
-            if (keyError) return@setOnClickListener
+                    val value = binding.userAttributeAddValueInput.text
+                    val valueError = InputUtils.errorOnBlankField(
+                        value,
+                        binding.userAttributeAddValue,
+                        resources.getString(R.string.missing_value)
+                    )
+                    if (valueError) return@setOnClickListener
 
-            val value = binding.userAttributeAddValueInput.text
-            val valueError = InputUtils.errorOnBlankField(
-                value,
-                binding.userAttributeAddValue,
-                resources.getString(R.string.missing_value)
-            )
-            if (valueError) return@setOnClickListener
-
-            if (user.attributes.containsKey(key.toString())) {
-                binding.userAttributeAddKey.error =
-                    resources.getString(R.string.user_attribute_duplicate)
-            } else {
-                binding.userAttributeAddKey.error = ""
-                userService.addAttribute(user.id, key.toString(), value.toString())
-                context?.toast(resources.getString(R.string.user_attribute_created))
-                findNavController().navigateUp()
-            }
-        }
+                    if (user.attributes.containsKey(key.toString())) {
+                        binding.userAttributeAddKey.error =
+                            resources.getString(R.string.user_attribute_duplicate)
+                    } else {
+                        binding.userAttributeAddKey.error = ""
+                        userService.addAttribute(
+                            user.id,
+                            key.toString(),
+                            value.toString(),
+                            onSuccess = {
+                                context?.toast(resources.getString(R.string.user_attribute_created))
+                                findNavController().navigateUp()
+                            },
+                            onFailure = {
+                                context?.toast(resources.getString(R.string.user_attribute_cannot_create))
+                            }
+                        )
+                    }
+                }
+            }, onFailure = {
+                context?.toast("Cannot find current user")
+            })
     }
 
 }

@@ -77,8 +77,11 @@
     <string name="user_attributes_title">Attributes</string>
     <string name="user_attributes_empty">No user attributes</string>
     <string name="user_attribute_deleted">Attribute was deleted</string>
+    <string name="user_attribute_cannot_delete">Cannot delete attribute</string>
     <string name="user_attribute_create">Create attribute</string>
     <string name="user_attribute_created">Attribute created</string>
+    <string name="user_attribute_cannot_get">Cannot get user attributes</string>
+    <string name="user_attribute_cannot_create">Cannot create user attribute</string>
     <string name="user_attribute_duplicate">Attribute already exists</string>
     <string name="create_attribute_floating_button">Create attribute floating button</string>
     <string name="key">Key</string>
