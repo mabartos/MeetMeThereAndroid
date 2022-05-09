@@ -23,6 +23,10 @@
     <string name="day">Day</string>
     <string name="end">End</string>
     <string name="create_event">Create event</string>
+    <string name="event_created">Event was created</string>
+    <string name="event_not_created">Cannot create event</string>
+    <string name="event_updated">Event was updated</string>
+    <string name="event_not_updated">Cannot update event</string>
     <string name="register">Register</string>
     <string name="username">Username</string>
     <string name="email">Email</string>
@@ -41,6 +45,7 @@
     <string name="start_time_settings">Set event start time</string>
     <string name="end_day_settings">Set event end day</string>
     <string name="end_time_settings">Set event end time</string>
+    <string name="specify_valid_time">You need to specify a valid time</string>
     <string name="slider">Slider</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>

@@ -36,10 +36,6 @@ class TestEventService : EventService {
             }
         }
 
-    private fun isInvalidIndex(id: Long): Boolean {
-        return id < 0 || id >= events.size
-    }
-
     private fun mapEventToEventItem(id: Long, event: Event): EventsListItem {
         return EventsListItem(
             id = id,
@@ -49,9 +45,9 @@ class TestEventService : EventService {
             description = event.description,
             isPublic = event.isPublic,
             createdById = id,
-            createdByName = "UserEventId${id}",
+            createdByName = "User${id.toString().subSequence(0, 2)}",
             updatedById = id,
-            updatedByName = "UserEventId${id}",
+            updatedByName = "UserEventId${id.toString().subSequence(0, 2)}",
             startTime = event.startTime,
             endTime = event.endTime,
             response = event.response,
@@ -81,7 +77,6 @@ class TestEventService : EventService {
     ) {
         ServiceUtil.callback(
             supplier = {
-                if (isInvalidIndex(id)) throw ModelNotFoundException()
                 events.find { event -> event.id == id } ?: throw ModelNotFoundException()
             }, onSuccess = { list ->
                 onSuccess.invoke(list)
@@ -93,7 +88,7 @@ class TestEventService : EventService {
     override fun removeEvent(id: Long, onSuccess: () -> Unit, onFailure: (Throwable) -> Unit) {
         ServiceUtil.callback(
             supplier = {
-                if (!isInvalidIndex(id)) events.removeAt(id.toInt())
+                events.removeIf { event -> event.id == id }
             }, onSuccess = {
                 onSuccess.invoke()
             }, onFailure = { e ->
@@ -135,8 +130,8 @@ class TestEventService : EventService {
                 val eventItem = mapEventToEventItem(event.hashCode().toLong(), event)
                 events.add(eventItem)
                 eventItem.id
-            }, onSuccess = { list ->
-                onSuccess.invoke(list)
+            }, onSuccess = { id ->
+                onSuccess.invoke(id)
             }, onFailure = { e ->
                 onFailure.invoke(e)
             })

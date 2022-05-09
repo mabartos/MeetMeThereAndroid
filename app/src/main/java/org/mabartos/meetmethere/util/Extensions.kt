@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -73,7 +72,7 @@ fun Context.formatDate(
     locale: Locale = Locale.getDefault()
 ): String {
     return try {
-        val outputDateFormat = SimpleDateFormat(pattern, locale)
+        val outputDateFormat = DateTimeFormatter.ofPattern(pattern, locale)
         outputDateFormat.format(date)
     } catch (e: Throwable) {
         print("Cannot format date")

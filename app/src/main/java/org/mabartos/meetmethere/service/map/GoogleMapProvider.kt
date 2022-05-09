@@ -111,6 +111,7 @@ class GoogleMapProvider(val context: Context, val fragment: Fragment) : MapProvi
             clusterManager = ClusterManager(context, map)
         }
 
+        map.clear()
         clusterManager!!.clearItems()
 
         clusterManager!!.setOnClusterItemClickListener { false }
@@ -124,10 +125,11 @@ class GoogleMapProvider(val context: Context, val fragment: Fragment) : MapProvi
         val markers = mutableListOf<ClusterEventItem>()
 
         val markerList = getMarkersCallback?.invoke()
-        markerList?.forEach { marker ->
-            markers.add(marker)
-            clusterManager!!.addItem(marker)
-        }
+        markerList?.filter { i -> i.event.latitude != null && i.event.longitude != null }
+            ?.forEach { marker ->
+                markers.add(marker)
+                clusterManager!!.addItem(marker)
+            }
 
         val builder = LatLngBounds.Builder()
 
@@ -191,19 +193,17 @@ class GoogleMapProvider(val context: Context, val fragment: Fragment) : MapProvi
     }
 
     @SuppressLint("MissingPermission")
-    private fun places(){
+    private fun places() {
         val placeFields: List<Place.Field> = listOf(Place.Field.NAME)
 
-
-
-// Use the builder to create a FindCurrentPlaceRequest.
         val request: FindCurrentPlaceRequest = FindCurrentPlaceRequest.newInstance(placeFields)
 
         val placeResponse = placesClient.findCurrentPlace(request)
         placeResponse.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val response = task.result
-                for (placeLikelihood: PlaceLikelihood in response?.placeLikelihoods ?: emptyList()) {
+                for (placeLikelihood: PlaceLikelihood in response?.placeLikelihoods
+                    ?: emptyList()) {
                     Log.i(
                         TAG,
                         "Place '${placeLikelihood.place.name}' has likelihood: ${placeLikelihood.likelihood}"

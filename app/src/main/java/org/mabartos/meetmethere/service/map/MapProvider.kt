@@ -28,7 +28,6 @@ abstract class MapProvider(private val fragment: Fragment) {
     open fun onMarkerClick(
         onMarkerClick: (ClusterEventItem) -> Boolean
     ) {
-        isMarkerSelected = true
         this.onMarkerClick = onMarkerClick
     }
 

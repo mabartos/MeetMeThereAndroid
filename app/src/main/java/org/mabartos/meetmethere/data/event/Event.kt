@@ -14,8 +14,8 @@ class Event(
     val startTime: LocalDateTime,
     val endTime: LocalDateTime,
     val response: String,
-    val longitude: Double,
-    val latitude: Double
+    val longitude: Double?,
+    val latitude: Double?
 ) : Parcelable {
 
     class Builder(event: Event) {
@@ -27,8 +27,8 @@ class Event(
         private var startTime: LocalDateTime = event.startTime;
         private var endTime: LocalDateTime = event.endTime;
         private var response: String = event.response;
-        private var longitude: Double = event.longitude;
-        private var latitude: Double = event.latitude
+        private var longitude: Double? = event.longitude;
+        private var latitude: Double? = event.latitude
 
         fun title(title: String) = apply { this.title = title }
         fun venue(venue: String) = apply { this.venue = venue }
@@ -38,8 +38,8 @@ class Event(
         fun startTime(startTime: LocalDateTime) = apply { this.startTime = startTime }
         fun endTime(endTime: LocalDateTime) = apply { this.endTime = endTime }
         fun response(response: String) = apply { this.response = response }
-        fun longitude(longitude: Double) = apply { this.longitude = longitude }
-        fun latitude(latitude: Double) = apply { this.latitude = latitude }
+        fun longitude(longitude: Double?) = apply { this.longitude = longitude }
+        fun latitude(latitude: Double?) = apply { this.latitude = latitude }
 
         fun build() = Event(
             title = title,

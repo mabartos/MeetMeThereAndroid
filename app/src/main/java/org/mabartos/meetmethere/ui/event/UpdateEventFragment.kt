@@ -49,7 +49,7 @@ class UpdateEventFragment(
         binding.eventUpdateToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
-        binding.eventUpdateToolbar.title = "Update event"
+        binding.eventUpdateToolbar.title = resources.getString(R.string.event_updated)
 
         val event = UpdateEventFragmentArgs.fromBundle(requireArguments()).event
 
@@ -71,7 +71,7 @@ class UpdateEventFragment(
         binding.eventUpdateStartDayInput.setOnClickListener {
             context?.datePicker(
                 parentFragmentManager,
-                title = R.string.start_day_settings.toString(),
+                title = resources.getString(R.string.start_day_settings),
                 onPositiveClick = { date ->
                     startDate = date
                     binding.eventUpdateStartDay.hint =
@@ -83,7 +83,7 @@ class UpdateEventFragment(
         binding.eventUpdateStartTimeInput.setOnClickListener {
             context?.timePicker(
                 parentFragmentManager,
-                title = "Set start time",
+                title = resources.getString(R.string.start_time_settings),
                 onPositiveClick = { time ->
                     startTime = time
                     binding.eventUpdateStartTime.hint = context?.formatTime(time)
@@ -93,7 +93,7 @@ class UpdateEventFragment(
         binding.eventUpdateEndDayInput.setOnClickListener {
             context?.datePicker(
                 parentFragmentManager,
-                title = R.string.end_day_settings.toString(),
+                title = resources.getString(R.string.end_day_settings),
                 onPositiveClick = { date ->
                     endDate = date
                     binding.eventUpdateEndDay.hint =
@@ -105,7 +105,7 @@ class UpdateEventFragment(
         binding.eventUpdateEndTimeInput.setOnClickListener {
             context?.timePicker(
                 parentFragmentManager,
-                title = "Set end time",
+                title = resources.getString(R.string.end_time_settings),
                 onPositiveClick = { time ->
                     endTime = time
                     binding.eventUpdateEndTime.hint = context?.formatTime(time)
@@ -160,10 +160,10 @@ class UpdateEventFragment(
 
             if (isUpdated) {
                 eventService.updateEvent(event.id, builder.build(), onSuccess = {
-                    context?.toast("Event updated");
+                    context?.toast(resources.getString(R.string.event_updated));
                     findNavController().navigateUp()
                 }, onFailure = { e ->
-                    context?.toast("Cannot update event.")
+                    context?.toast(resources.getString(R.string.event_not_updated))
                     Log.e(tag, "Cannot update event.", e)
                 })
             }

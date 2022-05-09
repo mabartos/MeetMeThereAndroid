@@ -37,19 +37,18 @@ class CreateEventFragment(
         return binding.root
     }
 
-    //TODO localize
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.eventCreateToolbar.setNavigationIcon(R.drawable.ic_close)
         binding.eventCreateToolbar.setCollapseIcon(R.drawable.ic_burger_menu)
         binding.eventCreateToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
-        binding.eventCreateToolbar.title = "Create event"
+        binding.eventCreateToolbar.title = resources.getString(R.string.create_event)
 
         binding.eventCreateStartDayInput.setOnClickListener {
             context?.datePicker(
                 parentFragmentManager,
-                title = R.string.start_day_settings.toString(),
+                title = resources.getString(R.string.start_day_settings),
                 onPositiveClick = { date ->
                     startDate = date
                     binding.eventCreateStartDay.hint = context?.formatDate("dd.MM", date)
@@ -60,7 +59,7 @@ class CreateEventFragment(
         binding.eventCreateStartTimeInput.setOnClickListener {
             context?.timePicker(
                 parentFragmentManager,
-                title = "Set start time",
+                title = resources.getString(R.string.start_time_settings),
                 onPositiveClick = { time ->
                     startTime = time
                     binding.eventCreateStartTime.hint = context?.formatTime(time)
@@ -70,7 +69,7 @@ class CreateEventFragment(
         binding.eventCreateEndDayInput.setOnClickListener {
             context?.datePicker(
                 parentFragmentManager,
-                title = R.string.end_day_settings.toString(),
+                title = resources.getString(R.string.end_day_settings),
                 onPositiveClick = { date ->
                     endDate = date
                     binding.eventCreateEndDay.hint = context?.formatDate("dd.MM", date)
@@ -81,21 +80,20 @@ class CreateEventFragment(
         binding.eventCreateEndTimeInput.setOnClickListener {
             context?.timePicker(
                 parentFragmentManager,
-                title = "Set end time",
+                title = resources.getString(R.string.end_time_settings),
                 onPositiveClick = { time ->
                     endTime = time
                     binding.eventCreateEndTime.hint = context?.formatTime(time)
                 })
         }
 
-        //TODO
         binding.eventCreateSaveButton.setOnClickListener {
             val titleText = binding.eventCreateNameInput.text.toString()
             val venueText = binding.eventCreateVenueInput.text.toString()
             val descriptionText = binding.eventCreateDescriptionInput.text.toString()
 
             if (startDate == null || endDate == null || startTime == null || endTime == null) {
-                context?.toast("You need to specify a valid time")
+                context?.toast(resources.getString(R.string.specify_valid_time))
                 return@setOnClickListener
             }
 
@@ -120,16 +118,16 @@ class CreateEventFragment(
                         endTime!!.minute
                     ),
                     isPublic = true, //TODO
-                    longitude = 20.0, //TODO
-                    latitude = 20.0,
+                    longitude = null,
+                    latitude = null,
                     response = EventResponseEnum.ACCEPT.textForm
                 )
 
             eventService.createEvent(createEvent, onSuccess = {
-                context?.toast("Event was created");
+                context?.toast(resources.getString(R.string.event_created));
                 findNavController().navigateUp()
             }, onFailure = { e ->
-                context?.toast("Cannot create event.")
+                context?.toast(resources.getString(R.string.event_not_created))
                 Log.e(tag.toString(), "Cannot create event", e)
             })
         }

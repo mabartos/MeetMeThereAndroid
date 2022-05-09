@@ -61,10 +61,11 @@ class EventsListFragment(
             })
 
             changeVisibility(View.VISIBLE)
+            mapProvider.isMarkerSelected = true
             return@onMarkerClick false
         }
 
-        mapProvider.onMapClick { _ ->
+        mapProvider.onMapClick {
             if (mapProvider.isMarkerSelected) {
                 changeVisibility(View.GONE)
                 mapProvider.isMarkerSelected = false
@@ -72,16 +73,17 @@ class EventsListFragment(
         }
 
         mapProvider.getMarkers {
-            events.stream().map {
-                ClusterEventItem(
-                    it.latitude,
-                    it.longitude,
-                    it.title,
-                    context?.formatDate("dd.MM - ", it.startTime) +
-                            context?.formatTime(it.startTime.toLocalTime()),
-                    it
-                )
-            }.collect(Collectors.toList())
+            events.stream()
+                .filter { f -> f.latitude != null && f.longitude != null }.map {
+                    ClusterEventItem(
+                        it.latitude!!,
+                        it.longitude!!,
+                        it.title,
+                        context?.formatDate("dd.MM - ", it.startTime) +
+                                context?.formatTime(it.startTime.toLocalTime()),
+                        it
+                    )
+                }.collect(Collectors.toList())
         }
 
         return binding.root

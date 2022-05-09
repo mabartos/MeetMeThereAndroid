@@ -19,8 +19,8 @@ class EventsListItem(
     val startTime: LocalDateTime,
     val endTime: LocalDateTime,
     val response: String,
-    val longitude: Double,
-    val latitude: Double
+    val longitude: Double?,
+    val latitude: Double?
 ) : Parcelable {
 
     fun toEvent(): Event {
