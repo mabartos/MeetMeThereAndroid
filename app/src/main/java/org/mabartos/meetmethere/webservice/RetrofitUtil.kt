@@ -10,12 +10,15 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 object RetrofitUtil {
     //TODO
-    private const val BASE_URL = "http://www.something.com"
+    const val BASE_URL = "http://www.something.com"
 
-    fun createAqiWebService(): EventsApi =
-        create(BASE_URL, createOkHttpClient())
+    inline fun <reified T> createAqiWebService(url: String): T =
+        create(url, createOkHttpClient())
 
-    private inline fun <reified T> create(baseUrl: String, okHttpClient: OkHttpClient): T =
+    inline fun <reified T> createAqiWebService(): T =
+        createAqiWebService(BASE_URL)
+
+    inline fun <reified T> create(baseUrl: String, okHttpClient: OkHttpClient): T =
         Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)
@@ -23,7 +26,7 @@ object RetrofitUtil {
             .build()
             .create(T::class.java)
 
-    private fun createOkHttpClient(): OkHttpClient =
+    fun createOkHttpClient(): OkHttpClient =
         OkHttpClient.Builder().apply {
             val logging = HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY

@@ -7,7 +7,13 @@ class UserServiceUtil {
 
         fun createService(): UserService {
             if (service == null) {
-                service = TestUserService()
+                val isProductVersion: String? = System.getProperty("product", "")
+
+                service = if (isProductVersion!!.isNotBlank() && "false" != isProductVersion) {
+                    DefaultUserService()
+                } else {
+                    TestUserService()
+                }
             }
             return service!!
         }

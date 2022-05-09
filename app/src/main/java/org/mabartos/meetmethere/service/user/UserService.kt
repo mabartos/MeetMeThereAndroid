@@ -19,14 +19,12 @@ interface UserService {
     fun login(
         username: String,
         password: String,
-        onSuccess: (Boolean) -> Unit,
+        onSuccess: () -> Unit,
         onFailure: (Throwable) -> Unit
     )
 
     @Throws(ModelDuplicateException::class)
-    fun register(user: CreateUser, onSuccess: (Boolean) -> Unit, onFailure: (Throwable) -> Unit)
-
-    fun getInfo(onSuccess: (User?) -> Unit, onFailure: (Throwable) -> Unit)
+    fun register(user: CreateUser, onSuccess: () -> Unit, onFailure: (Throwable) -> Unit)
 
     fun updateUser(user: User, onSuccess: () -> Unit, onFailure: (Throwable) -> Unit)
 
@@ -45,6 +43,12 @@ interface UserService {
     fun removeAttribute(
         userId: Long,
         key: String,
+        onSuccess: () -> Unit,
+        onFailure: (Throwable) -> Unit
+    )
+
+    fun removeAttributes(
+        userId: Long,
         onSuccess: () -> Unit,
         onFailure: (Throwable) -> Unit
     )

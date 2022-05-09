@@ -7,9 +7,10 @@ import org.mabartos.meetmethere.webservice.EventsApi
 import org.mabartos.meetmethere.webservice.RetrofitUtil
 
 class DefaultEventService(
-    private val token: String,
     private val eventsApi: EventsApi = RetrofitUtil.createAqiWebService(),
 ) : EventService {
+
+    private var token: String = ""
 
     override fun getEvents(
         onSuccess: (List<EventsListItem>) -> Unit,

@@ -107,7 +107,7 @@ class TestUserService : UserService {
     override fun login(
         username: String,
         password: String,
-        onSuccess: (Boolean) -> Unit,
+        onSuccess: () -> Unit,
         onFailure: (Throwable) -> Unit
     ) {
         findByUsername(username,
@@ -115,6 +115,7 @@ class TestUserService : UserService {
                 if (user.password == password) {
                     this.token = UUID.randomUUID().toString()
                     this.currentUser = user
+                    onSuccess.invoke()
                 } else {
                     throw IllegalArgumentException("Invalid password")
                 }
@@ -125,7 +126,7 @@ class TestUserService : UserService {
 
     override fun register(
         user: CreateUser,
-        onSuccess: (Boolean) -> Unit,
+        onSuccess: () -> Unit,
         onFailure: (Throwable) -> Unit
     ) {
         findByUsername(user.username,
@@ -149,11 +150,7 @@ class TestUserService : UserService {
         val converted: User = mapCreateUserToUser(user.hashCode().toLong(), user)
         this.currentUser = converted
         users.add(converted)
-    }
-
-
-    override fun getInfo(onSuccess: (User?) -> Unit, onFailure: (Throwable) -> Unit) {
-        onSuccess.invoke(currentUser)
+        onSuccess.invoke()
     }
 
     override fun updateUser(user: User, onSuccess: () -> Unit, onFailure: (Throwable) -> Unit) {
@@ -162,6 +159,7 @@ class TestUserService : UserService {
                 val index = users.indexOf(it)
                 if (index != -1) {
                     users[index] = user
+                    onSuccess.invoke()
                 } else {
                     throw ModelNotFoundException()
                 }
@@ -236,5 +234,13 @@ class TestUserService : UserService {
                 }
             },
             onFailure = { onFailure.invoke(it) })
+    }
+
+    override fun removeAttributes(
+        userId: Long,
+        onSuccess: () -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        TODO("Not yet implemented")
     }
 }
