@@ -1,13 +1,18 @@
 package org.mabartos.meetmethere.ui.list
 
+import android.content.res.Resources
 import androidx.recyclerview.widget.RecyclerView
 import com.nostra13.universalimageloader.core.ImageLoader
+import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.event.EventsListItem
 import org.mabartos.meetmethere.databinding.EventListItemBinding
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class EventsViewHolder(private val binding: EventListItemBinding) :
+class EventsViewHolder(
+    private val binding: EventListItemBinding,
+    private val resources: Resources
+) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(
@@ -27,9 +32,14 @@ class EventsViewHolder(private val binding: EventListItemBinding) :
 
         binding.dateViewMonth.text = startTime.month.name.substring(0, 3)
         binding.dateViewDay.text = startTime.dayOfMonth.toString()
-        binding.eventInvitedBy.text = "Invited by ${listItem.createdByName}"
+        binding.eventInvitedBy.text =
+            "${resources.getString(R.string.invited_by)} ${listItem.createdByName}"
 
-        ImageLoader.getInstance().displayImage(listItem.imageUrl, binding.eventImage)
+        if (listItem.imageUrl.isNotBlank()) {
+            ImageLoader.getInstance().displayImage(listItem.imageUrl, binding.eventImage)
+        } else {
+            binding.eventImage.background = resources.getDrawable(R.drawable.no_image)
+        }
 
         binding.eventCard.setOnClickListener {
             onItemClick(listItem)

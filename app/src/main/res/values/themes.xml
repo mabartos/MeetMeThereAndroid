@@ -23,5 +23,7 @@
     <item name="colorOnPrimary" type="color">@color/white</item>
     <item name="colorTextOnPrimary" type="color">@color/black</item>
 
-    <style name="EventCard" parent="Widget.Material3.CardView.Elevated" />
+    <style name="EventCard" parent="Widget.Material3.CardView.Elevated">
+        <item name="backgroundColor">@color/freesia</item>
+    </style>
 </resources>

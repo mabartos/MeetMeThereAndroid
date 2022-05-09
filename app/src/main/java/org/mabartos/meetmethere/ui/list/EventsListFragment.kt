@@ -55,7 +55,7 @@ class EventsListFragment(
         mapProvider.onMarkerClick { eventItem ->
             val event = eventItem.event
 
-            EventsViewHolder(binding.eventSelected).bind(event, onItemClick = {
+            EventsViewHolder(binding.eventSelected, resources).bind(event, onItemClick = {
                 findNavController()
                     .navigate(EventsListFragmentDirections.actionListFragmentToDetailFragment(event.id))
             })

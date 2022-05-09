@@ -13,8 +13,9 @@ class EventsListAdapter(
     private var listItems: MutableList<EventsListItem> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventsViewHolder {
-        val binding = EventListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return EventsViewHolder(binding)
+        val binding =
+            EventListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return EventsViewHolder(binding, parent.context.resources)
     }
 
     override fun onBindViewHolder(holder: EventsViewHolder, position: Int) {
