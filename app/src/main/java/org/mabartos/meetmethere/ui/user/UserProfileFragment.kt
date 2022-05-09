@@ -64,7 +64,7 @@ class UserProfileFragment(
 
         binding.userProfileOrganizedButton.setOnClickListener {
             findNavController().navigate(
-                UserProfileFragmentDirections.actionProfileEditToOrganizedEvents(
+                UserProfileFragmentDirections.actionUserProfileToOrganizedEvents(
                     user
                 )
             )

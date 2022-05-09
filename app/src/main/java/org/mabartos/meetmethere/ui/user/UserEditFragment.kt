@@ -52,6 +52,12 @@ class UserEditFragment(
         binding.userUpdateAttrButton.text = resources.getString(R.string.edit_user_attributes)
         binding.userUpdatePasswordButton.text = resources.getString(R.string.change_password)
 
+        binding.userUpdateAttrButton.setOnClickListener {
+            findNavController().navigate(
+                UserEditFragmentDirections.actionUserProfileEditToUserAttributes()
+            )
+        }
+
         binding.userUpdatePasswordButton.setOnClickListener {
             findNavController().navigate(
                 UserEditFragmentDirections.actionUserProfileEditFragmentToUserChangePasswordFragment(

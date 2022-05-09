@@ -107,7 +107,7 @@
             app:destination="@id/userProfileEditFragment" />
 
         <action
-            android:id="@+id/action_profileEdit_to_organizedEvents"
+            android:id="@+id/action_userProfile_to_organizedEvents"
             app:destination="@id/userOrganizedEventsFragment" />
         <action
             android:id="@+id/action_userProfile_to_userAttributes"
@@ -123,6 +123,10 @@
         <action
             android:id="@+id/action_userProfileEditFragment_to_userChangePasswordFragment"
             app:destination="@id/userChangePasswordFragment" />
+
+        <action
+            android:id="@+id/action_userProfileEdit_to_userAttributes"
+            app:destination="@id/userAttributesFragment" />
     </fragment>
 
     <fragment
