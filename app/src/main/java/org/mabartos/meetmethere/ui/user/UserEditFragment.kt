@@ -1,6 +1,7 @@
 package org.mabartos.meetmethere.ui.user
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.user.User
 import org.mabartos.meetmethere.databinding.FragmentUserEditBinding
-import org.mabartos.meetmethere.service.user.ModelDuplicateException
+import org.mabartos.meetmethere.service.ModelNotFoundException
 import org.mabartos.meetmethere.service.user.UserService
 import org.mabartos.meetmethere.service.user.UserServiceUtil
 import org.mabartos.meetmethere.util.InputUtils
@@ -95,7 +96,6 @@ class UserEditFragment(
                     val firstName = binding.userUpdateFirstnameInput.text
                     val lastName = binding.userUpdateLastnameInput.text
 
-                    //TODO
                     if (username.toString() != user.username) {
                         userService.findByUsername(
                             username = username.toString(),
@@ -104,7 +104,7 @@ class UserEditFragment(
                                     resources.getString(R.string.duplicate_username)
                             },
                             onFailure = {
-                                if (it is ModelDuplicateException) {
+                                if (it is ModelNotFoundException) {
                                     isUpdated = true
                                     builder.username(username.toString())
                                 }
@@ -119,7 +119,7 @@ class UserEditFragment(
                                     resources.getString(R.string.duplicate_email)
                             },
                             onFailure = {
-                                if (it is ModelDuplicateException) {
+                                if (it is ModelNotFoundException) {
                                     isUpdated = true
                                     builder.email(email.toString())
                                 }
@@ -142,11 +142,12 @@ class UserEditFragment(
                         userService.updateUser(
                             user = builder.build(),
                             onSuccess = {
-                                context?.toast("User updated")
+                                context?.toast(resources.getString(R.string.user_updated))
                                 findNavController().navigateUp()
                             },
                             onFailure = { e ->
-                                context?.toast("Cannot update user. ${e.message}")
+                                context?.toast(resources.getString(R.string.user_cannot_update))
+                                Log.e(tag.toString(), "Cannot update user", e)
                             })
                     }
                 }

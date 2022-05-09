@@ -77,6 +77,8 @@
     <string name="password_was_not_changed">Cannot change password</string>
     <string name="user_attributes_title">Attributes</string>
     <string name="user_attributes_empty">No user attributes</string>
+    <string name="user_updated">User updated</string>
+    <string name="user_cannot_update">Cannot update user</string>
     <string name="user_attribute_deleted">Attribute was deleted</string>
     <string name="user_attribute_cannot_delete">Cannot delete attribute</string>
     <string name="user_attribute_create">Create attribute</string>

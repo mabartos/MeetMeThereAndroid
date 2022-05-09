@@ -7,7 +7,6 @@ import org.mabartos.meetmethere.service.ServiceUtil
 import org.mabartos.meetmethere.service.user.UserService.Companion.EMAIL_FIELD
 import org.mabartos.meetmethere.service.user.UserService.Companion.USERNAME_FIELD
 import java.util.*
-import kotlin.collections.HashMap
 
 class TestUserService : UserService {
 
@@ -67,7 +66,7 @@ class TestUserService : UserService {
     override fun findById(id: Long, onSuccess: (User) -> Unit, onFailure: (Throwable) -> Unit) {
         ServiceUtil.callback(
             supplier = {
-                users.find { u -> u.id == id } ?: throw ModelDuplicateException()
+                users.find { u -> u.id == id } ?: throw ModelNotFoundException()
             }, onSuccess = {
                 onSuccess.invoke(it)
             }, onFailure = {
@@ -82,7 +81,7 @@ class TestUserService : UserService {
     ) {
         ServiceUtil.callback(
             supplier = {
-                users.find { u -> u.username == username } ?: throw ModelDuplicateException()
+                users.find { u -> u.username == username } ?: throw ModelNotFoundException()
             }, onSuccess = {
                 onSuccess.invoke(it)
             }, onFailure = {
@@ -97,7 +96,7 @@ class TestUserService : UserService {
     ) {
         ServiceUtil.callback(
             supplier = {
-                users.find { u -> u.email == email } ?: throw ModelDuplicateException()
+                users.find { u -> u.email == email } ?: throw ModelNotFoundException()
             }, onSuccess = {
                 onSuccess.invoke(it)
             }, onFailure = {

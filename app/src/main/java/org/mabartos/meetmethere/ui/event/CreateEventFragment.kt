@@ -37,6 +37,7 @@ class CreateEventFragment(
         return binding.root
     }
 
+    //TODO localize
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.eventCreateToolbar.setNavigationIcon(R.drawable.ic_close)
         binding.eventCreateToolbar.setCollapseIcon(R.drawable.ic_burger_menu)
