@@ -34,16 +34,15 @@
         android:label="DetailFragment"
         tools:layout="@layout/fragment_event_detail">
 
-        <argument
-            android:name="id"
-            app:argType="long" />
-
         <action
             android:id="@+id/action_detail_to_updateEvent"
             app:destination="@id/updateEventFragment" />
         <action
             android:id="@+id/action_detail_to_listFragment"
             app:destination="@id/listFragment" />
+        <argument
+            android:name="event"
+            app:argType="org.mabartos.meetmethere.data.event.EventsListItem" />
 
     </fragment>
 

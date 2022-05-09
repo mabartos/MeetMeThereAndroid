@@ -49,7 +49,7 @@ class OrganizedEventsFragment(
                     findNavController()
                         .navigate(
                             OrganizedEventsFragmentDirections.actionUserOrganizedEventsFragmentToDetailFragment(
-                                event.id
+                                event
                             )
                         )
                 },
@@ -62,7 +62,7 @@ class OrganizedEventsFragment(
                 .forEach { id ->
                     eventService.getEvent(
                         id,
-                        onSuccess = { item -> if (item != null) adapter.addItem(item) },
+                        onSuccess = { item -> adapter.addItem(item) },
                         onFailure = {})
                 }
         } else {

@@ -12,6 +12,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nostra13.universalimageloader.core.ImageLoader
 import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.event.EventResponseEnum
+import org.mabartos.meetmethere.data.event.EventsListItem
 import org.mabartos.meetmethere.databinding.FragmentEventDetailBinding
 import org.mabartos.meetmethere.service.event.EventService
 import org.mabartos.meetmethere.service.event.EventServiceUtil
@@ -45,102 +46,16 @@ class EventDetailFragment(
             findNavController().navigateUp()
         }
 
-        val id = EventDetailFragmentArgs.fromBundle(requireArguments()).id
-        eventService.getEvent(id,
-            onSuccess = { eventItem ->
-                val item = eventItem ?: return@getEvent
+        val event = EventDetailFragmentArgs.fromBundle(requireArguments()).event
+        initData(event)
 
-                binding.eventDetailToolbar.title = item.title
-                binding.eventDetailTitle.text = item.title
-                binding.eventDetailVenue.text = item.venue
-
-                ImageLoader.getInstance().displayImage(item.imageUrl, binding.eventDetailImage)
-
-                val startTime: LocalDateTime = item.startTime
-                val endTime: LocalDateTime = item.endTime
-
-                binding.eventDetailStartTitle.text = resources.getText(R.string.start)
-                binding.eventDetailStartDate.text = context?.formatDate("dd.MM.yyyy", startTime)
-                binding.eventDetailStartTime.text = context?.formatTime(startTime.toLocalTime())
-
-                binding.eventDetailEndTitle.text = resources.getText(R.string.end)
-                binding.eventDetailEndDate.text = context?.formatDate("dd.MM.yyyy", endTime)
-                binding.eventDetailEndTime.text = context?.formatTime(endTime.toLocalTime())
-
-                binding.eventDetailDescription.text = item.description
-
-                binding.eventDetailEdit.setOnClickListener {
-                    findNavController().navigate(
-                        EventDetailFragmentDirections.actionDetailToUpdateEvent(
-                            item
-                        )
-                    )
-                }
-
-                binding.eventDetailDelete.setOnClickListener {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.deleteThisEventQuestion)
-                        .setMessage(R.string.deleteEventConfirmationMsg)
-                        .setNeutralButton(resources.getString(R.string.cancel)) { _, _ ->
-                        }
-                        .setPositiveButton(
-                            resources.getString(R.string.confirm).uppercase()
-                        ) { _, _ ->
-                            findNavController().navigate(EventDetailFragmentDirections.actionDetailToListFragment())
-                            eventService.removeEvent(item.id, onSuccess = {
-                                context?.toast("Event was deleted")
-                            }, onFailure = { e ->
-                                context?.toast("Cannot delete event")
-                                Log.e(
-                                    EventDetailFragment::getTag.toString(),
-                                    "Cannot delete event", e
-                                )
-                            })
-                        }
-                        .show()
-                }
-
-                val response = EventResponseEnum.getByTextForm(item.response)
-                this.currentResponse = response
-
-                when (response) {
-                    EventResponseEnum.ACCEPT -> {
-                        changeAttendanceButtonsColors(binding.eventDetailAcceptButton)
-                    }
-                    EventResponseEnum.MAYBE -> {
-                        changeAttendanceButtonsColors(binding.eventDetailMaybeButton)
-                    }
-                    EventResponseEnum.DECLINE -> {
-                        changeAttendanceButtonsColors(binding.eventDetailDeclineButton)
-                    }
-                    EventResponseEnum.NOT_ANSWERED -> {
-                        clearAttendanceButtons()
-                    }
-                    else -> {
-                        context?.toast("Unknown response type!")
-                    }
-                }
-
-                binding.eventDetailAcceptButton.setOnClickListener {
-                    changeAttendanceButtonsColors(binding.eventDetailAcceptButton)
-                    currentResponse = checkCurrentResponse(item.id, EventResponseEnum.ACCEPT)
-                }
-
-                binding.eventDetailMaybeButton.setOnClickListener {
-                    changeAttendanceButtonsColors(binding.eventDetailMaybeButton)
-                    currentResponse = checkCurrentResponse(item.id, EventResponseEnum.MAYBE)
-                }
-
-                binding.eventDetailDeclineButton.setOnClickListener {
-                    changeAttendanceButtonsColors(binding.eventDetailDeclineButton)
-                    currentResponse = checkCurrentResponse(item.id, EventResponseEnum.DECLINE)
-                }
+        eventService.getEvent(event.id,
+            onSuccess = { item ->
+                initData(item)
             }, onFailure = { e ->
                 context?.toast("Event doesn't exist")
                 Log.e(EventDetailFragment::getTag.toString(), e.message ?: e.toString())
             })
-
-
     }
 
     private fun checkCurrentResponse(
@@ -219,6 +134,99 @@ class EventDetailFragment(
                     context?.getColorStateList(R.color.colorOnPrimary)
                 binding.eventDetailMaybeButton.setTextColor(context?.getColorStateList(R.color.colorTextOnPrimary))
             }
+        }
+    }
+
+    private fun initData(item: EventsListItem) {
+
+        binding.eventDetailToolbar.title = item.title
+        binding.eventDetailTitle.text = item.title
+        binding.eventDetailVenue.text = item.venue
+
+        if (item.imageUrl.isNotBlank()) {
+            ImageLoader.getInstance().displayImage(item.imageUrl, binding.eventDetailImage)
+        } else {
+            binding.eventDetailImage.visibility = View.GONE
+        }
+
+        val startTime: LocalDateTime = item.startTime
+        val endTime: LocalDateTime = item.endTime
+
+        binding.eventDetailStartTitle.text = resources.getText(R.string.start)
+        binding.eventDetailStartDate.text = context?.formatDate("dd.MM.yyyy", startTime)
+        binding.eventDetailStartTime.text = context?.formatTime(startTime.toLocalTime())
+
+        binding.eventDetailEndTitle.text = resources.getText(R.string.end)
+        binding.eventDetailEndDate.text = context?.formatDate("dd.MM.yyyy", endTime)
+        binding.eventDetailEndTime.text = context?.formatTime(endTime.toLocalTime())
+
+        binding.eventDetailDescription.text = item.description
+
+        binding.eventDetailEdit.setOnClickListener {
+            findNavController().navigate(
+                EventDetailFragmentDirections.actionDetailToUpdateEvent(
+                    item
+                )
+            )
+        }
+
+        binding.eventDetailDelete.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.deleteThisEventQuestion)
+                .setMessage(R.string.deleteEventConfirmationMsg)
+                .setNeutralButton(resources.getString(R.string.cancel)) { _, _ ->
+                }
+                .setPositiveButton(
+                    resources.getString(R.string.confirm).uppercase()
+                ) { _, _ ->
+                    findNavController().navigate(EventDetailFragmentDirections.actionDetailToListFragment())
+                    eventService.removeEvent(item.id, onSuccess = {
+                        context?.toast("Event was deleted")
+                    }, onFailure = { e ->
+                        context?.toast("Cannot delete event")
+                        Log.e(
+                            EventDetailFragment::getTag.toString(),
+                            "Cannot delete event", e
+                        )
+                    })
+                }
+                .show()
+        }
+
+        val response = EventResponseEnum.getByTextForm(item.response)
+        this.currentResponse = response
+
+        when (response) {
+            EventResponseEnum.ACCEPT -> {
+                changeAttendanceButtonsColors(binding.eventDetailAcceptButton)
+            }
+            EventResponseEnum.MAYBE -> {
+                changeAttendanceButtonsColors(binding.eventDetailMaybeButton)
+            }
+            EventResponseEnum.DECLINE -> {
+                changeAttendanceButtonsColors(binding.eventDetailDeclineButton)
+            }
+            EventResponseEnum.NOT_ANSWERED -> {
+                clearAttendanceButtons()
+            }
+            else -> {
+                context?.toast("Unknown response type!")
+            }
+        }
+
+        binding.eventDetailAcceptButton.setOnClickListener {
+            changeAttendanceButtonsColors(binding.eventDetailAcceptButton)
+            currentResponse = checkCurrentResponse(item.id, EventResponseEnum.ACCEPT)
+        }
+
+        binding.eventDetailMaybeButton.setOnClickListener {
+            changeAttendanceButtonsColors(binding.eventDetailMaybeButton)
+            currentResponse = checkCurrentResponse(item.id, EventResponseEnum.MAYBE)
+        }
+
+        binding.eventDetailDeclineButton.setOnClickListener {
+            changeAttendanceButtonsColors(binding.eventDetailDeclineButton)
+            currentResponse = checkCurrentResponse(item.id, EventResponseEnum.DECLINE)
         }
     }
 }

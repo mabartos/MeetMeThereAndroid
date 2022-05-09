@@ -12,7 +12,7 @@ interface EventService {
 
     fun getEvent(
         id: Long,
-        onSuccess: (EventsListItem?) -> Unit,
+        onSuccess: (EventsListItem) -> Unit,
         onFailure: (Throwable) -> Unit
     )
 

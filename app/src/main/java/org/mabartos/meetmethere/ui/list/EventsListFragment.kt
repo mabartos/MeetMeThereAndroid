@@ -57,7 +57,7 @@ class EventsListFragment(
 
             EventsViewHolder(binding.eventSelected, resources).bind(event, onItemClick = {
                 findNavController()
-                    .navigate(EventsListFragmentDirections.actionListFragmentToDetailFragment(event.id))
+                    .navigate(EventsListFragmentDirections.actionListFragmentToDetailFragment(event))
             })
 
             changeVisibility(View.VISIBLE)
@@ -101,7 +101,7 @@ class EventsListFragment(
         val adapter = EventsListAdapter(
             onItemClick = { event ->
                 findNavController()
-                    .navigate(EventsListFragmentDirections.actionListFragmentToDetailFragment(event.id))
+                    .navigate(EventsListFragmentDirections.actionListFragmentToDetailFragment(event))
             },
         )
 

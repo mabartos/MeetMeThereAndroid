@@ -27,7 +27,7 @@ class DefaultEventService(
 
     override fun getEvent(
         id: Long,
-        onSuccess: (EventsListItem?) -> Unit,
+        onSuccess: (EventsListItem) -> Unit,
         onFailure: (Throwable) -> Unit
     ) {
         RetrofitUtil.callback(supplier = {
@@ -57,7 +57,7 @@ class DefaultEventService(
     ) {
         RetrofitUtil.callback(supplier = {
             eventsApi.updateEvent(id, event, token)
-        }, onSuccess = { id ->
+        }, onSuccess = {
             onSuccess.invoke(id)
         }, onFailure = { e ->
             onFailure.invoke(e)

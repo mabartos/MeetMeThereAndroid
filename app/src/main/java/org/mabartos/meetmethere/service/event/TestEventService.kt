@@ -3,6 +3,7 @@ package org.mabartos.meetmethere.service.event
 import org.mabartos.meetmethere.data.event.Event
 import org.mabartos.meetmethere.data.event.EventResponseEnum
 import org.mabartos.meetmethere.data.event.EventsListItem
+import org.mabartos.meetmethere.service.ModelNotFoundException
 import org.mabartos.meetmethere.service.ServiceUtil
 import java.time.LocalDateTime
 import java.util.concurrent.ThreadLocalRandom
@@ -75,12 +76,13 @@ class TestEventService : EventService {
 
     override fun getEvent(
         id: Long,
-        onSuccess: (EventsListItem?) -> Unit,
+        onSuccess: (EventsListItem) -> Unit,
         onFailure: (Throwable) -> Unit
     ) {
         ServiceUtil.callback(
             supplier = {
-                return@callback if (!isInvalidIndex(id)) events.find { event -> event.id == id } else null
+                if (isInvalidIndex(id)) throw ModelNotFoundException()
+                events.find { event -> event.id == id } ?: throw ModelNotFoundException()
             }, onSuccess = { list ->
                 onSuccess.invoke(list)
             }, onFailure = { e ->
@@ -132,7 +134,7 @@ class TestEventService : EventService {
             supplier = {
                 val eventItem = mapEventToEventItem(event.hashCode().toLong(), event)
                 events.add(eventItem)
-                return@callback eventItem.id
+                eventItem.id
             }, onSuccess = { list ->
                 onSuccess.invoke(list)
             }, onFailure = { e ->
@@ -148,15 +150,17 @@ class TestEventService : EventService {
     ) {
         ServiceUtil.callback(
             supplier = {
-                val event = events.find { event -> event.id == id }
-                if (event != null && event.response != state.textForm) {
+                val event =
+                    events.find { event -> event.id == id } ?: throw ModelNotFoundException()
+
+                if (event.response != state.textForm) {
                     val index = events.indexOf(event)
                     if (index != -1) {
                         events[index] =
                             mapEventToEventItem(id, Event.Builder(event.toEvent()).build())
+                        onSuccess.invoke()
                     }
                 }
-                return@callback
             }, onSuccess = {
                 onSuccess.invoke()
             }, onFailure = { e ->
