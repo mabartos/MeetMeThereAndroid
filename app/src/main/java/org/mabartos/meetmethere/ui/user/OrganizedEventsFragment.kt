@@ -13,8 +13,6 @@ import org.mabartos.meetmethere.databinding.FragmentOrganizedEventsBinding
 import org.mabartos.meetmethere.service.event.EventService
 import org.mabartos.meetmethere.service.event.EventServiceUtil
 import org.mabartos.meetmethere.ui.list.EventsListAdapter
-import java.util.*
-import java.util.stream.Collectors
 
 class OrganizedEventsFragment(
     private val eventService: EventService = EventServiceUtil.createService()
@@ -60,13 +58,13 @@ class OrganizedEventsFragment(
             binding.organizedEventsList.layoutManager = LinearLayoutManager(requireContext())
             binding.organizedEventsList.adapter = adapter
 
-            val organizedEvents = organizedEventsId.stream()
-                .map { id -> eventService.getEvent(id) }
-                .filter { f -> Objects.nonNull(f) }
-                .map { f -> f!! }
-                .collect(Collectors.toList())
-
-            adapter.submitList(organizedEvents)
+            organizedEventsId.stream()
+                .forEach { id ->
+                    eventService.getEvent(
+                        id,
+                        onSuccess = { item -> if (item != null) adapter.addItem(item) },
+                        onFailure = {})
+                }
         } else {
             binding.organizedEventsList.visibility = View.GONE
             binding.organizedEventsEmpty.visibility = View.VISIBLE

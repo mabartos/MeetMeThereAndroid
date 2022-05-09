@@ -9,19 +9,29 @@ interface EventsApi {
 
     @GET("events/")
     fun getAllEvents(
-        @Query("token") token: String,
-    ): Call<EventsListItem>
+        @Header("Authorization") token: String,
+    ): Call<List<EventsListItem>>
 
     @GET("events/@{id}/")
     fun getSingleEvent(
         @Path("id") id: Long,
-        @Query("token") token: String,
+        @Header("Authorization") token: String,
     ): Call<EventsListItem>
 
+    @DELETE("events/@{id}")
+    fun removeEvent(id: Long, @Header("Authorization") token: String): Call<Unit>
+
     @POST("events/")
-    fun createEvent(event: Event): Call<Long>
+    fun createEvent(event: Event, @Header("Authorization") token: String): Call<Long>
 
     @PATCH("events/@{id}/")
-    fun updateEvent(id: Long, event: Event): Call<Long>
+    fun updateEvent(
+        @Path("id") id: Long,
+        event: Event,
+        @Header("Authorization") token: String
+    ): Call<Long>
+
+    @POST("events/@{id}/response")
+    fun attendance(@Path("id") id: Long, @Header("Authorization") token: String): Call<Unit>
 
 }

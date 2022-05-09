@@ -3,6 +3,7 @@ package org.mabartos.meetmethere.service.event
 import org.mabartos.meetmethere.data.event.Event
 import org.mabartos.meetmethere.data.event.EventResponseEnum
 import org.mabartos.meetmethere.data.event.EventsListItem
+import org.mabartos.meetmethere.service.ServiceUtil
 import java.time.LocalDateTime
 import java.util.concurrent.ThreadLocalRandom
 
@@ -34,44 +35,6 @@ class TestEventService : EventService {
             }
         }
 
-    override fun getEvents(): List<EventsListItem> {
-        return events
-    }
-
-    override fun getEvent(id: Long): EventsListItem? {
-        if (isInvalidIndex(id)) return null
-        return events.find { event -> event.id == id }
-    }
-
-    override fun removeEvent(id: Long) {
-        if (isInvalidIndex(id)) return
-        events.removeAt(id.toInt())
-    }
-
-    override fun updateEvent(id: Long, event: Event) {
-        val found = getEvent(id)
-        if (found != null) {
-            val index = events.indexOf(found)
-            if (index != -1) {
-                events[index] = mapEventToEventItem(id, Event.Builder(event).build())
-                return
-            }
-        }
-    }
-
-    override fun createEvent(event: Event): EventsListItem {
-        val eventItem = mapEventToEventItem(event.hashCode().toLong(), event)
-        events.add(eventItem)
-        return eventItem
-    }
-
-    override fun attendance(id: Long, state: EventResponseEnum) {
-        val event = getEvent(id)
-        if (event != null && event.response != state.textForm) {
-            updateEvent(id, Event.Builder(event.toEvent()).response(state.textForm).build())
-        }
-    }
-
     private fun isInvalidIndex(id: Long): Boolean {
         return id < 0 || id >= events.size
     }
@@ -94,6 +57,111 @@ class TestEventService : EventService {
             latitude = event.latitude,
             longitude = event.longitude
         )
+    }
+
+    override fun getEvents(
+        onSuccess: (List<EventsListItem>) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        ServiceUtil.callback(
+            supplier = {
+                events
+            }, onSuccess = { list ->
+                onSuccess.invoke(list)
+            }, onFailure = { e ->
+                onFailure.invoke(e)
+            })
+    }
+
+    override fun getEvent(
+        id: Long,
+        onSuccess: (EventsListItem?) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        ServiceUtil.callback(
+            supplier = {
+                return@callback if (!isInvalidIndex(id)) events.find { event -> event.id == id } else null
+            }, onSuccess = { list ->
+                onSuccess.invoke(list)
+            }, onFailure = { e ->
+                onFailure.invoke(e)
+            })
+    }
+
+    override fun removeEvent(id: Long, onSuccess: () -> Unit, onFailure: (Throwable) -> Unit) {
+        ServiceUtil.callback(
+            supplier = {
+                if (!isInvalidIndex(id)) events.removeAt(id.toInt())
+            }, onSuccess = {
+                onSuccess.invoke()
+            }, onFailure = { e ->
+                onFailure.invoke(e)
+            })
+    }
+
+    override fun updateEvent(
+        id: Long,
+        event: Event,
+        onSuccess: (Long) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        ServiceUtil.callback(
+            supplier = {
+                val found = events.find { event -> event.id == id }
+                if (found != null) {
+                    val index = events.indexOf(found)
+                    if (index != -1) {
+                        events[index] = mapEventToEventItem(id, Event.Builder(event).build())
+                        return@callback id
+                    }
+                }
+                -1
+            }, onSuccess = { list ->
+                onSuccess.invoke(list)
+            }, onFailure = { e ->
+                onFailure.invoke(e)
+            })
+    }
+
+    override fun createEvent(
+        event: Event,
+        onSuccess: (Long) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        ServiceUtil.callback(
+            supplier = {
+                val eventItem = mapEventToEventItem(event.hashCode().toLong(), event)
+                events.add(eventItem)
+                return@callback eventItem.id
+            }, onSuccess = { list ->
+                onSuccess.invoke(list)
+            }, onFailure = { e ->
+                onFailure.invoke(e)
+            })
+    }
+
+    override fun attendance(
+        id: Long,
+        state: EventResponseEnum,
+        onSuccess: () -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        ServiceUtil.callback(
+            supplier = {
+                val event = events.find { event -> event.id == id }
+                if (event != null && event.response != state.textForm) {
+                    val index = events.indexOf(event)
+                    if (index != -1) {
+                        events[index] =
+                            mapEventToEventItem(id, Event.Builder(event.toEvent()).build())
+                    }
+                }
+                return@callback
+            }, onSuccess = {
+                onSuccess.invoke()
+            }, onFailure = { e ->
+                onFailure.invoke(e)
+            })
     }
 
 }

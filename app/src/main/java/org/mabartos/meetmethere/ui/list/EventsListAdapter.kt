@@ -27,6 +27,11 @@ class EventsListAdapter(
         notifyDataSetChanged()
     }
 
+    fun addItem(event: EventsListItem) {
+        listItems.add(event)
+        notifyDataSetChanged()
+    }
+
     fun removeItem(position: Int) {
         listItems.removeAt(position)
         notifyItemRemoved(position)

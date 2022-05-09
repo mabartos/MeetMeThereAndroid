@@ -1,6 +1,7 @@
 package org.mabartos.meetmethere.ui.event
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,6 @@ import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.event.Event
 import org.mabartos.meetmethere.data.event.EventResponseEnum
 import org.mabartos.meetmethere.databinding.FragmentEventCreateBinding
-import org.mabartos.meetmethere.service.ServiceUtil
 import org.mabartos.meetmethere.service.event.EventService
 import org.mabartos.meetmethere.service.event.EventServiceUtil
 import org.mabartos.meetmethere.util.*
@@ -124,16 +124,13 @@ class CreateEventFragment(
                     response = EventResponseEnum.ACCEPT.textForm
                 )
 
-            ServiceUtil.callback(
-                supplier = { eventService.createEvent(createEvent) },
-                onSuccess = { event ->
-                    context?.toast("Event '${event.title}' created");
-                    findNavController().navigateUp()
-                },
-                onFailure = { e ->
-                    context?.toast("Cannot create event. ${e.message}")
-                }
-            )
+            eventService.createEvent(createEvent, onSuccess = {
+                context?.toast("Event was created");
+                findNavController().navigateUp()
+            }, onFailure = { e ->
+                context?.toast("Cannot create event.")
+                Log.e(tag.toString(), "Cannot create event", e)
+            })
         }
 
     }

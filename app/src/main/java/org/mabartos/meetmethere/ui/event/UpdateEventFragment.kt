@@ -1,6 +1,7 @@
 package org.mabartos.meetmethere.ui.event
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.event.Event
 import org.mabartos.meetmethere.databinding.FragmentEventUpdateBinding
-import org.mabartos.meetmethere.service.ServiceUtil
 import org.mabartos.meetmethere.service.event.EventService
 import org.mabartos.meetmethere.service.event.EventServiceUtil
 import org.mabartos.meetmethere.util.*
@@ -121,16 +121,13 @@ class UpdateEventFragment(
 
             //TODO DATE
             if (isUpdated) {
-                ServiceUtil.callback(
-                    supplier = { eventService.updateEvent(event.id, builder.build()) },
-                    onSuccess = {
-                        context?.toast("Event updated");
-                        findNavController().navigateUp()
-                    },
-                    onFailure = { e ->
-                        context?.toast("Cannot update event. ${e.message}")
-                    }
-                )
+                eventService.updateEvent(event.id, builder.build(), onSuccess = {
+                    context?.toast("Event updated");
+                    findNavController().navigateUp()
+                }, onFailure = { e ->
+                    context?.toast("Cannot update event.")
+                    Log.e(tag, "Cannot update event.", e)
+                })
             }
         }
     }

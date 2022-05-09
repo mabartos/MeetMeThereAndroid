@@ -1,6 +1,7 @@
 package org.mabartos.meetmethere.ui.detail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nostra13.universalimageloader.core.ImageLoader
 import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.event.EventResponseEnum
-import org.mabartos.meetmethere.data.event.EventsListItem
 import org.mabartos.meetmethere.databinding.FragmentEventDetailBinding
 import org.mabartos.meetmethere.service.event.EventService
 import org.mabartos.meetmethere.service.event.EventServiceUtil
@@ -46,91 +46,101 @@ class EventDetailFragment(
         }
 
         val id = EventDetailFragmentArgs.fromBundle(requireArguments()).id
-        val item: EventsListItem? = eventService.getEvent(id)
+        eventService.getEvent(id,
+            onSuccess = { eventItem ->
+                val item = eventItem ?: return@getEvent
 
-        if (item == null) {
-            context?.toast("Event doesn't exist")
-            return
-        }
+                binding.eventDetailToolbar.title = item.title
+                binding.eventDetailTitle.text = item.title
+                binding.eventDetailVenue.text = item.venue
 
-        binding.eventDetailToolbar.title = item.title
-        binding.eventDetailTitle.text = item.title
-        binding.eventDetailVenue.text = item.venue
+                ImageLoader.getInstance().displayImage(item.imageUrl, binding.eventDetailImage)
 
-        ImageLoader.getInstance().displayImage(item.imageUrl, binding.eventDetailImage)
+                val startTime: LocalDateTime = item.startTime
+                val endTime: LocalDateTime = item.endTime
 
-        val startTime: LocalDateTime = item.startTime
-        val endTime: LocalDateTime = item.endTime
+                binding.eventDetailStartTitle.text = resources.getText(R.string.start)
+                binding.eventDetailStartDate.text = context?.formatDate("dd.MM.yyyy", startTime)
+                binding.eventDetailStartTime.text = context?.formatTime(startTime.toLocalTime())
 
-        binding.eventDetailStartTitle.text = resources.getText(R.string.start)
-        binding.eventDetailStartDate.text = context?.formatDate("dd.MM.yyyy", startTime)
-        binding.eventDetailStartTime.text = context?.formatTime(startTime.toLocalTime())
+                binding.eventDetailEndTitle.text = resources.getText(R.string.end)
+                binding.eventDetailEndDate.text = context?.formatDate("dd.MM.yyyy", endTime)
+                binding.eventDetailEndTime.text = context?.formatTime(endTime.toLocalTime())
 
-        binding.eventDetailEndTitle.text = resources.getText(R.string.end)
-        binding.eventDetailEndDate.text = context?.formatDate("dd.MM.yyyy", endTime)
-        binding.eventDetailEndTime.text = context?.formatTime(endTime.toLocalTime())
+                binding.eventDetailDescription.text = item.description
 
-        binding.eventDetailDescription.text = item.description
-
-        binding.eventDetailEdit.setOnClickListener {
-            findNavController().navigate(
-                EventDetailFragmentDirections.actionDetailToUpdateEvent(
-                    item
-                )
-            )
-        }
-
-        binding.eventDetailDelete.setOnClickListener {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.deleteThisEventQuestion)
-                .setMessage(R.string.deleteEventConfirmationMsg)
-                .setNeutralButton(resources.getString(R.string.cancel)) { _, _ ->
+                binding.eventDetailEdit.setOnClickListener {
+                    findNavController().navigate(
+                        EventDetailFragmentDirections.actionDetailToUpdateEvent(
+                            item
+                        )
+                    )
                 }
-                .setPositiveButton(
-                    resources.getString(R.string.confirm).uppercase()
-                ) { _, _ ->
-                    findNavController().navigate(EventDetailFragmentDirections.actionDetailToListFragment())
-                    eventService.removeEvent(item.id)
-                    context?.toast("Event was deleted")
+
+                binding.eventDetailDelete.setOnClickListener {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(R.string.deleteThisEventQuestion)
+                        .setMessage(R.string.deleteEventConfirmationMsg)
+                        .setNeutralButton(resources.getString(R.string.cancel)) { _, _ ->
+                        }
+                        .setPositiveButton(
+                            resources.getString(R.string.confirm).uppercase()
+                        ) { _, _ ->
+                            findNavController().navigate(EventDetailFragmentDirections.actionDetailToListFragment())
+                            eventService.removeEvent(item.id, onSuccess = {
+                                context?.toast("Event was deleted")
+                            }, onFailure = { e ->
+                                context?.toast("Cannot delete event")
+                                Log.e(
+                                    EventDetailFragment::getTag.toString(),
+                                    "Cannot delete event", e
+                                )
+                            })
+                        }
+                        .show()
                 }
-                .show()
-        }
 
-        val response = EventResponseEnum.getByTextForm(item.response)
-        this.currentResponse = response
+                val response = EventResponseEnum.getByTextForm(item.response)
+                this.currentResponse = response
 
-        when (response) {
-            EventResponseEnum.ACCEPT -> {
-                changeAttendanceButtonsColors(binding.eventDetailAcceptButton)
-            }
-            EventResponseEnum.MAYBE -> {
-                changeAttendanceButtonsColors(binding.eventDetailMaybeButton)
-            }
-            EventResponseEnum.DECLINE -> {
-                changeAttendanceButtonsColors(binding.eventDetailDeclineButton)
-            }
-            EventResponseEnum.NOT_ANSWERED -> {
-                clearAttendanceButtons()
-            }
-            else -> {
-                context?.toast("Unknown response type!")
-            }
-        }
+                when (response) {
+                    EventResponseEnum.ACCEPT -> {
+                        changeAttendanceButtonsColors(binding.eventDetailAcceptButton)
+                    }
+                    EventResponseEnum.MAYBE -> {
+                        changeAttendanceButtonsColors(binding.eventDetailMaybeButton)
+                    }
+                    EventResponseEnum.DECLINE -> {
+                        changeAttendanceButtonsColors(binding.eventDetailDeclineButton)
+                    }
+                    EventResponseEnum.NOT_ANSWERED -> {
+                        clearAttendanceButtons()
+                    }
+                    else -> {
+                        context?.toast("Unknown response type!")
+                    }
+                }
 
-        binding.eventDetailAcceptButton.setOnClickListener {
-            changeAttendanceButtonsColors(binding.eventDetailAcceptButton)
-            currentResponse = checkCurrentResponse(item.id, EventResponseEnum.ACCEPT)
-        }
+                binding.eventDetailAcceptButton.setOnClickListener {
+                    changeAttendanceButtonsColors(binding.eventDetailAcceptButton)
+                    currentResponse = checkCurrentResponse(item.id, EventResponseEnum.ACCEPT)
+                }
 
-        binding.eventDetailMaybeButton.setOnClickListener {
-            changeAttendanceButtonsColors(binding.eventDetailMaybeButton)
-            currentResponse = checkCurrentResponse(item.id, EventResponseEnum.MAYBE)
-        }
+                binding.eventDetailMaybeButton.setOnClickListener {
+                    changeAttendanceButtonsColors(binding.eventDetailMaybeButton)
+                    currentResponse = checkCurrentResponse(item.id, EventResponseEnum.MAYBE)
+                }
 
-        binding.eventDetailDeclineButton.setOnClickListener {
-            changeAttendanceButtonsColors(binding.eventDetailDeclineButton)
-            currentResponse = checkCurrentResponse(item.id, EventResponseEnum.DECLINE)
-        }
+                binding.eventDetailDeclineButton.setOnClickListener {
+                    changeAttendanceButtonsColors(binding.eventDetailDeclineButton)
+                    currentResponse = checkCurrentResponse(item.id, EventResponseEnum.DECLINE)
+                }
+            }, onFailure = { e ->
+                context?.toast("Event doesn't exist")
+                Log.e(EventDetailFragment::getTag.toString(), e.message ?: e.toString())
+            })
+
+
     }
 
     private fun checkCurrentResponse(
@@ -139,10 +149,14 @@ class EventDetailFragment(
     ): EventResponseEnum {
         return if (currentResponse == checkedEnum) {
             clearAttendanceButtons()
-            eventService.attendance(itemId, EventResponseEnum.NOT_ANSWERED)
+            eventService.attendance(
+                itemId,
+                EventResponseEnum.NOT_ANSWERED,
+                onSuccess = {},
+                onFailure = {})
             EventResponseEnum.NOT_ANSWERED
         } else {
-            eventService.attendance(itemId, checkedEnum)
+            eventService.attendance(itemId, checkedEnum, onSuccess = {}, onFailure = {})
             checkedEnum
         }
     }

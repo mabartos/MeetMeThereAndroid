@@ -97,7 +97,6 @@ class EventsListFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        this.events = eventService.getEvents()
 
         val adapter = EventsListAdapter(
             onItemClick = { event ->
@@ -105,6 +104,13 @@ class EventsListFragment(
                     .navigate(EventsListFragmentDirections.actionListFragmentToDetailFragment(event.id))
             },
         )
+
+        eventService.getEvents(onSuccess = { eventsList ->
+            this.events = eventsList
+            adapter.submitList(this.events)
+        }, onFailure = { e ->
+            Log.e(EventsListFragment::getTag.toString(), "Cannot fetch events", e)
+        })
 
         binding.createEventFloatingButton.setOnClickListener {
             findNavController().navigate(EventsListFragmentDirections.actionListFragmentToCreateEventDialog())
@@ -117,8 +123,6 @@ class EventsListFragment(
 
         binding.eventsList.layoutManager = LinearLayoutManager(requireContext())
         binding.eventsList.adapter = adapter
-
-        adapter.submitList(this.events)
 
         binding.searchPlaceButton.setOnClickListener {
             val AUTOCOMPLETE_REQUEST_CODE = 1
