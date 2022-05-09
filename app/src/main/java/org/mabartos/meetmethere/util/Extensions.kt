@@ -2,6 +2,7 @@ package org.mabartos.meetmethere.util
 
 import android.content.Context
 import android.text.format.DateFormat
+import android.util.Patterns
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -100,3 +101,5 @@ fun Context.formatTime(
         "N/A"
     }
 }
+
+fun isValidEmail(email: String): Boolean = Patterns.EMAIL_ADDRESS.matcher(email).matches()

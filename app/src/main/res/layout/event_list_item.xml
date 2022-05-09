@@ -9,7 +9,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="15sp"
-    app:cardElevation="5dp">
+    app:cardElevation="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/event_card_layout"

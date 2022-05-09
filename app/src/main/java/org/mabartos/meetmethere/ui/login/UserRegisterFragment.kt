@@ -14,6 +14,7 @@ import org.mabartos.meetmethere.service.user.ModelDuplicateException
 import org.mabartos.meetmethere.service.user.UserService
 import org.mabartos.meetmethere.service.user.UserServiceUtil
 import org.mabartos.meetmethere.util.InputUtils
+import org.mabartos.meetmethere.util.isValidEmail
 
 class UserRegisterFragment(
     private val userService: UserService = UserServiceUtil.createService()
@@ -52,6 +53,13 @@ class UserRegisterFragment(
                 resources.getString(R.string.missing_email)
             )
             if (emailError) return@setOnClickListener
+
+            if (!isValidEmail(email.toString())) {
+                binding.userRegisterEmail.error = resources.getString(R.string.email_wrong_format)
+                return@setOnClickListener
+            } else {
+                binding.userRegisterEmail.error = ""
+            }
 
             val firstName = binding.userRegisterFirstnameInput.text
             val lastName = binding.userRegisterLastnameInput.text

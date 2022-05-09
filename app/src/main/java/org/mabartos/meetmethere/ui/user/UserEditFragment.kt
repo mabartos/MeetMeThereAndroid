@@ -13,6 +13,7 @@ import org.mabartos.meetmethere.service.user.ModelDuplicateException
 import org.mabartos.meetmethere.service.user.UserService
 import org.mabartos.meetmethere.service.user.UserServiceUtil
 import org.mabartos.meetmethere.util.InputUtils
+import org.mabartos.meetmethere.util.isValidEmail
 import org.mabartos.meetmethere.util.toast
 
 class UserEditFragment(
@@ -82,6 +83,14 @@ class UserEditFragment(
                         resources.getString(R.string.missing_email)
                     )
                     if (emailError) return@setOnClickListener
+
+                    if (!isValidEmail(email.toString())) {
+                        binding.userUpdateEmail.error =
+                            resources.getString(R.string.email_wrong_format)
+                        return@setOnClickListener
+                    } else {
+                        binding.userUpdateEmail.error = ""
+                    }
 
                     val firstName = binding.userUpdateFirstnameInput.text
                     val lastName = binding.userUpdateLastnameInput.text

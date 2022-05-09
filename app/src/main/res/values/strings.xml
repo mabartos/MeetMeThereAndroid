@@ -26,6 +26,7 @@
     <string name="register">Register</string>
     <string name="username">Username</string>
     <string name="email">Email</string>
+    <string name="email_wrong_format">Wrong email format</string>
     <string name="firstname">First name</string>
     <string name="lastname">Last name</string>
     <string name="password">Password</string>
