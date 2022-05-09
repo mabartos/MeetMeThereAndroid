@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -20,6 +21,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.PlaceLikelihood
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.maps.android.clustering.ClusterManager
 import org.mabartos.meetmethere.BuildConfig
@@ -186,5 +190,33 @@ class GoogleMapProvider(val context: Context, val fragment: Fragment) : MapProvi
         }
     }
 
+    @SuppressLint("MissingPermission")
+    private fun places(){
+        val placeFields: List<Place.Field> = listOf(Place.Field.NAME)
+
+
+
+// Use the builder to create a FindCurrentPlaceRequest.
+        val request: FindCurrentPlaceRequest = FindCurrentPlaceRequest.newInstance(placeFields)
+
+        val placeResponse = placesClient.findCurrentPlace(request)
+        placeResponse.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val response = task.result
+                for (placeLikelihood: PlaceLikelihood in response?.placeLikelihoods ?: emptyList()) {
+                    Log.i(
+                        TAG,
+                        "Place '${placeLikelihood.place.name}' has likelihood: ${placeLikelihood.likelihood}"
+                    )
+                }
+            } else {
+                val exception = task.exception
+                if (exception is ApiException) {
+                    Log.e(TAG, "Place not found: ${exception.statusCode}")
+                }
+            }
+        }
+
+    }
 
 }

@@ -2,7 +2,10 @@ package org.mabartos.meetmethere.ui.list
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewAnimationUtils
@@ -11,6 +14,10 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.AutocompleteActivity
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.data.event.EventsListItem
 import org.mabartos.meetmethere.databinding.FragmentEventListBinding
@@ -57,7 +64,7 @@ class EventsListFragment(
             return@onMarkerClick false
         }
 
-        mapProvider.onMapClick { c ->
+        mapProvider.onMapClick { _ ->
             if (mapProvider.isMarkerSelected) {
                 changeVisibility(View.GONE)
                 mapProvider.isMarkerSelected = false
@@ -113,6 +120,19 @@ class EventsListFragment(
 
         adapter.submitList(this.events)
 
+        binding.searchPlaceButton.setOnClickListener {
+            val AUTOCOMPLETE_REQUEST_CODE = 1
+
+            // Set the fields to specify which types of place data to
+            // return after the user has made a selection.
+            val fields = listOf(Place.Field.ID, Place.Field.NAME)
+
+            // Start the autocomplete intent.
+            val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+                .build(requireContext())
+            startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
+        }
+
         binding.profileButton.setOnClickListener {
             findNavController().navigate(EventsListFragmentDirections.actionListFragmentToUserProfile())
         }
@@ -121,6 +141,32 @@ class EventsListFragment(
             findNavController().navigate(EventsListFragmentDirections.actionListFragmentToLoginFragment())
             context?.toast(resources.getString(R.string.signed_off_note))
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 1) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    data?.let {
+                        val place = Autocomplete.getPlaceFromIntent(data)
+                        Log.i("map", "Place: ${place.name}, ${place.id}")
+                    }
+                }
+                AutocompleteActivity.RESULT_ERROR -> {
+                    // TODO: Handle the error.
+                    data?.let {
+                        val status = Autocomplete.getStatusFromIntent(data)
+                        Log.i("map", status.statusMessage ?: "")
+                    }
+                }
+                Activity.RESULT_CANCELED -> {
+                    // The user canceled the operation.
+                }
+            }
+            return
+        }
+
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onStop() {
