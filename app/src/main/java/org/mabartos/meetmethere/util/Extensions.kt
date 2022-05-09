@@ -2,9 +2,11 @@ package org.mabartos.meetmethere.util
 
 import android.content.Context
 import android.text.format.DateFormat
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
+import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -75,7 +77,7 @@ fun Context.formatDate(
         val outputDateFormat = DateTimeFormatter.ofPattern(pattern, locale)
         outputDateFormat.format(date)
     } catch (e: Throwable) {
-        print("Cannot format date")
+        Log.e("Context.formatDate", "Cannot format date", e)
         "N/A"
     }
 }
@@ -89,7 +91,7 @@ fun Context.formatDate(
         val outputDateFormat = DateTimeFormatter.ofPattern(pattern, locale)
         date.format(outputDateFormat)
     } catch (e: Throwable) {
-        print("Cannot format date")
+        Log.e("Context.formatDate", "Cannot format date", e)
         "N/A"
     }
 }
@@ -103,7 +105,7 @@ fun Context.formatTime(
         val formatter = DateTimeFormatter.ofPattern(clockFormat)
         time.format(formatter)
     } catch (e: Throwable) {
-        print("Cannot format time")
+        Log.e("Context.formatTime", "Cannot format time", e)
         "N/A"
     }
 }

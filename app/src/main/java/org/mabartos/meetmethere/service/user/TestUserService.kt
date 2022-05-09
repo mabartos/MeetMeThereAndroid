@@ -64,14 +64,12 @@ class TestUserService : UserService {
     }
 
     override fun findById(id: Long, onSuccess: (User) -> Unit, onFailure: (Throwable) -> Unit) {
-        ServiceUtil.callback(
-            supplier = {
-                users.find { u -> u.id == id } ?: throw ModelNotFoundException()
-            }, onSuccess = {
-                onSuccess.invoke(it)
-            }, onFailure = {
-                onFailure.invoke(it)
-            })
+        val user: User? = users.find { u -> u.id == id }
+        if (user != null) {
+            onSuccess.invoke(user)
+        } else {
+            onFailure.invoke(ModelNotFoundException())
+        }
     }
 
     override fun findByUsername(
@@ -79,14 +77,12 @@ class TestUserService : UserService {
         onSuccess: (User) -> Unit,
         onFailure: (Throwable) -> Unit
     ) {
-        ServiceUtil.callback(
-            supplier = {
-                users.find { u -> u.username == username } ?: throw ModelNotFoundException()
-            }, onSuccess = {
-                onSuccess.invoke(it)
-            }, onFailure = {
-                onFailure.invoke(it)
-            })
+        val user: User? = users.find { u -> u.username == username }
+        if (user != null) {
+            onSuccess.invoke(user)
+        } else {
+            onFailure.invoke(ModelNotFoundException())
+        }
     }
 
     override fun findByEmail(
@@ -94,14 +90,12 @@ class TestUserService : UserService {
         onSuccess: (User) -> Unit,
         onFailure: (Throwable) -> Unit
     ) {
-        ServiceUtil.callback(
-            supplier = {
-                users.find { u -> u.email == email } ?: throw ModelNotFoundException()
-            }, onSuccess = {
-                onSuccess.invoke(it)
-            }, onFailure = {
-                onFailure.invoke(it)
-            })
+        val user: User? = users.find { u -> u.email == email }
+        if (user != null) {
+            onSuccess.invoke(user)
+        } else {
+            onFailure.invoke(ModelNotFoundException())
+        }
     }
 
     override fun login(
@@ -129,23 +123,24 @@ class TestUserService : UserService {
         onSuccess: () -> Unit,
         onFailure: (Throwable) -> Unit
     ) {
-        findByUsername(user.username,
-            onSuccess = {
-                throw ModelDuplicateException(
+        if (users.any { f -> f.username == user.username }) {
+            onFailure.invoke(
+                ModelDuplicateException(
                     "This username is already in use",
                     USERNAME_FIELD
                 )
-            },
-            onFailure = {})
-
-        findByEmail(user.email,
-            onSuccess = {
-                throw ModelDuplicateException(
+            )
+            return
+        }
+        if (users.any { f -> f.email == user.email }) {
+            onFailure.invoke(
+                ModelDuplicateException(
                     "This email is already in use",
                     EMAIL_FIELD
                 )
-            },
-            onFailure = {})
+            )
+            return
+        }
 
         val converted: User = mapCreateUserToUser(user.hashCode().toLong(), user)
         this.currentUser = converted
@@ -154,6 +149,10 @@ class TestUserService : UserService {
     }
 
     override fun updateUser(user: User, onSuccess: () -> Unit, onFailure: (Throwable) -> Unit) {
+        if (!users.any { i -> i.id == user.id }) {
+            onFailure.invoke(ModelNotFoundException())
+        }
+
         findById(user.id,
             onSuccess = {
                 val index = users.indexOf(it)
