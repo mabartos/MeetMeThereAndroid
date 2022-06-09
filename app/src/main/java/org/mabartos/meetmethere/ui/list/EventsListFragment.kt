@@ -122,6 +122,7 @@ class EventsListFragment(
             ResourcesCompat.getDrawable(resources, R.color.freesia, null)
         binding.eventSelected.eventImage.background =
             ResourcesCompat.getDrawable(resources, R.color.tiffany_blue, null)
+        binding.eventSelected.eventCard.cardElevation =5f
 
         binding.eventsList.layoutManager = LinearLayoutManager(requireContext())
         binding.eventsList.adapter = adapter

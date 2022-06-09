@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.mabartos.meetmethere.R
 import org.mabartos.meetmethere.databinding.FragmentUserLoginBinding
+import org.mabartos.meetmethere.service.ModelNotFoundException
 import org.mabartos.meetmethere.service.user.UserService
 import org.mabartos.meetmethere.service.user.UserServiceUtil
 import org.mabartos.meetmethere.util.InputUtils.Companion.errorOnBlankField
@@ -54,7 +55,7 @@ class UserLoginFragment(
                 password = password.toString(),
                 onSuccess = { findNavController().navigate(UserLoginFragmentDirections.actionLoginToEventList()) },
                 onFailure = { e ->
-                    if (e is IllegalArgumentException && e.message != null && e.message!!.contains("Invalid")) {
+                    if (e is ModelNotFoundException || (e is IllegalArgumentException && e.message != null && e.message!!.contains("Invalid"))) {
                         context?.toast("Invalid password or user doesn't exist")
                     } else {
                         Log.e(tag.toString(), "Cannot login", e)

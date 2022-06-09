@@ -40,7 +40,7 @@ class TestUserService : UserService {
                 User(
                     id = Int.MAX_VALUE.toLong(),
                     username = "admin",
-                    email = "admin@admin",
+                    email = "admin@admin.com",
                     password = "admin",
                     firstName = "Admin",
                     lastName = "Admin",
@@ -111,7 +111,7 @@ class TestUserService : UserService {
                     this.currentUser = user
                     onSuccess.invoke()
                 } else {
-                    throw IllegalArgumentException("Invalid password")
+                    onFailure.invoke(IllegalArgumentException("Invalid password"))
                 }
             }, onFailure = {
                 onFailure.invoke(it)
